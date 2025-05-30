@@ -3,1065 +3,1232 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>O/L Study Hub | Modern Learning Platform</title>
-  <script src="https://cdn.tailwindcss.com"></script>
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/p5.js/1.4.0/p5.min.js"></script>
-  <script>
-    tailwind.config = {
-      theme: {
-        extend: {
-          colors: {
-            primary: {
-              50: '#f0fdf4',
-              100: '#dcfce7',
-              200: '#bbf7d0',
-              300: '#86efac',
-              400: '#4ade80',
-              500: '#22c55e',
-              600: '#16a34a',
-              700: '#15803d',
-              800: '#166534',
-              900: '#14532d',
-            },
-            secondary: {
-              50: '#fffbeb',
-              100: '#fef3c7',
-              200: '#fde68a', 
-              300: '#fcd34d',
-              400: '#fbbf24',
-              500: '#f59e0b',
-              600: '#d97706',
-              700: '#b45309',
-              800: '#92400e',
-              900: '#78350f',
-            },
-          },
-          fontFamily: {
-            sans: ['Inter', 'sans-serif'],
-          },
-        }
-      }
-    }
-  </script>
-  <style>
-    @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap');
-    
-    html {
-      scroll-behavior: smooth;
-    }
-    
-    .hero-gradient {
-      background: linear-gradient(135deg, #15803d 0%, #166534 100%);
-    }
-    
-    .shimmer {
-      background: linear-gradient(90deg, transparent, rgba(255,255,255,0.2), transparent);
-      background-size: 200% 100%;
-      animation: shimmer 2s infinite;
-    }
-    
-    @keyframes shimmer {
-      0% { background-position: -200% 0; }
-      100% { background-position: 200% 0; }
-    }
-    
-    .subject-card {
-      transition: all 0.3s ease;
-    }
-    
-    .subject-card:hover {
-      transform: translateY(-5px);
-    }
-    
-    #p5Canvas {
-      position: absolute;
-      top: 0;
-      left: 0;
-      z-index: 0;
-      opacity: 0.15;
-    }
-    
-    .parallax {
-      transition: transform 0.1s cubic-bezier(0.2, 0.8, 0.2, 1);
-    }
-  </style>
-</head>
-<body class="bg-gray-50 text-gray-800 font-sans">
-  <!-- Background Animation -->
-  <div id="p5Container" class="fixed w-full h-screen pointer-events-none"></div>
+  <title>Creative Portfolio | Art Director & Designer</title>
   
-  <!-- Header -->
-  <header class="sticky top-0 z-50 bg-white/90 backdrop-blur-md border-b border-gray-200">
-    <div class="max-w-7xl mx-auto">
-      <div class="flex justify-between items-center px-4 py-3 lg:px-8">
-        <div class="flex items-center space-x-2">
-          <div class="flex items-center justify-center w-10 h-10 rounded-full bg-primary-600 text-white">
-            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="w-6 h-6">
-              <path d="M11.7 2.805a.75.75 0 01.6 0A60.65 60.65 0 0122.83 8.72a.75.75 0 01-.231 1.337 49.949 49.949 0 00-9.902 3.912l-.003.002-.34.18a.75.75 0 01-.707 0A50.009 50.009 0 001.4 10.057a.75.75 0 01-.23-1.337A60.653 60.653 0 0111.7 2.805z" />
-              <path d="M13.06 15.473a48.45 48.45 0 017.666-3.282c.134 1.414.22 2.843.255 4.285a.75.75 0 01-.46.71 47.878 47.878 0 00-8.105 4.342.75.75 0 01-.832 0 47.877 47.877 0 00-8.104-4.342.75.75 0 01-.461-.71c.035-1.442.121-2.87.255-4.286A48.4 48.4 0 016 13.18v1.27a1.5 1.5 0 003 0v-1.27a48.4 48.4 0 014.06-1.007z" />
-            </svg>
-          </div>
-          <h1 class="text-xl font-bold text-primary-800">O/L Study Hub</h1>
-        </div>
-        
-        <!-- Desktop Navigation -->
-        <nav class="hidden md:flex space-x-8">
-          <a href="#home" class="text-gray-600 hover:text-primary-700 font-medium px-3 py-2 rounded-md transition">Home</a>
-          <a href="#subjects" class="text-gray-600 hover:text-primary-700 font-medium px-3 py-2 rounded-md transition">Subjects</a>
-          <a href="#features" class="text-gray-600 hover:text-primary-700 font-medium px-3 py-2 rounded-md transition">Features</a>
-          <a href="#premium" class="text-gray-600 hover:text-primary-700 font-medium px-3 py-2 rounded-md transition">Premium</a>
-          <a href="#community" class="text-gray-600 hover:text-primary-700 font-medium px-3 py-2 rounded-md transition">Community</a>
-        </nav>
-        
-        <div class="flex items-center space-x-4">
-          <a href="#login" class="hidden md:block text-gray-700 hover:text-primary-700 font-medium">Login</a>
-          <a href="#signup" class="hidden md:block bg-primary-600 hover:bg-primary-700 text-white px-4 py-2 rounded-lg font-medium transition">Sign Up</a>
-          
-          <!-- Mobile Menu Button -->
-          <button id="menuButton" class="md:hidden text-gray-700 hover:text-primary-700">
-            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-6 h-6">
-              <path stroke-linecap="round" stroke-linejoin="round" d="M3.75 6.75h16.5M3.75 12h16.5m-16.5 5.25h16.5" />
-            </svg>
-          </button>
-        </div>
-      </div>
+  <!-- Google Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
+  
+  <!-- Font Awesome Icons -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  
+  <!-- AOS Animation Library -->
+  <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
+  <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
+  <script src="https://cdn.tailwindcss.com"></script>
+
+    <!-- Swiper CSS -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.css" />
+    <!-- Swiper JS -->
+    <script src="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.js"></script>
+
+    <!-- P5.js -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/p5.js/1.7.0/p5.min.js"></script>
       
-      <!-- Mobile Navigation -->
-      <div id="mobileMenu" class="hidden md:hidden px-4 pb-3 border-t border-gray-200">
-        <nav class="flex flex-col space-y-2 pt-2">
-          <a href="#home" class="text-gray-600 hover:text-primary-700 py-2 font-medium">Home</a>
-          <a href="#subjects" class="text-gray-600 hover:text-primary-700 py-2 font-medium">Subjects</a>
-          <a href="#features" class="text-gray-600 hover:text-primary-700 py-2 font-medium">Features</a>
-          <a href="#premium" class="text-gray-600 hover:text-primary-700 py-2 font-medium">Premium</a>
-          <a href="#community" class="text-gray-600 hover:text-primary-700 py-2 font-medium">Community</a>
-          <div class="flex space-x-3 pt-2">
-            <a href="#login" class="text-gray-700 hover:text-primary-700 font-medium py-2 px-4 border border-gray-300 rounded-lg flex-1 text-center">Login</a>
-            <a href="#signup" class="bg-primary-600 hover:bg-primary-700 text-white py-2 px-4 rounded-lg font-medium transition flex-1 text-center">Sign Up</a>
-          </div>
+    <!-- Tailwind CSS -->
+     <script src="https://cdn.tailwindcss.com"></script>
+     <link href="styels.css" rel="stylesheet">
+
+
+   
+</head>
+
+<body>
+ 
+  
+  <!-- Preloader -->
+  <div class="preloader" id="preloader">
+    <div class="loader"></div>
+  </div>
+
+  <!-- Mobile Menu -->
+  <div class="mobile-menu" id="mobile-menu">
+    <button class="mobile-menu-close" id="mobile-menu-close">
+      <i class="fas fa-times"></i>
+    </button>
+    <ul>
+      <li><a href="#hero">Home</a></li>
+      <li><a href="#about">About</a></li>
+      <li><a href="#services">Services</a></li>
+      <li><a href="#skills">Skills</a></li>
+      <li><a href="#portfolio">Portfolio</a></li>
+      <li><a href="#contact">Contact</a></li>
+    </ul>
+    <div class="mobile-social">
+      <a href="#"><i class="fab fa-linkedin-in"></i></a>
+      <a href="#"><i class="fab fa-behance"></i></a>
+      <a href="#"><i class="fab fa-dribbble"></i></a>
+      <a href="#"><i class="fab fa-instagram"></i></a>
+    </div>
+  </div>
+
+  <!-- Header -->
+   
+   <!-- Announcement Bar -->
+  <div class="bg-pink-dark text-white py-2 px-4">
+    <div class="container mx-auto text-center text-sm">
+      <p>Fully Customizable Designs | Island-wide Delivery Available</p>
+    </div>
+  </div>
+  
+  <header id="header">
+    <div class="container">
+      <div class="header-inner">
+        <a href="#" class="logo">
+         
+          
+          Mova lk
+      
+        </a>
+        
+        <nav>
+          <ul>
+            <li><a href="#hero">HOME</a></li>
+            <li><a href="#about">ABOUT</a></li>
+            <li><a href="#services">SERVICES</a></li>
+            <li><a href="#portfolio">PORTFOLIO</a></li>
+            <li><a href="#contact">CONTACT</a></li>
+          </ul>
         </nav>
+        
+        <button class="mobile-menu-btn" id="mobile-menu-btn">
+          <i class="fas fa-bars"></i>
+        </button>
       </div>
     </div>
   </header>
+<main>
 
-  <!-- Hero Section -->
-  <section class="relative overflow-hidden py-20 lg:py-32 hero-gradient text-white" id="home">
-    <div class="relative z-10 max-w-7xl mx-auto px-4 lg:px-8">
-      <div class="grid md:grid-cols-2 gap-12 items-center">
-        <div class="parallax" data-depth="0.2">
-          <h2 class="text-4xl md:text-5xl lg:text-6xl font-bold leading-tight mb-6">
-            Study Smarter, <br />
-            <span class="text-secondary-300">Score Higher</span>
-          </h2>
-          <p class="text-lg md:text-xl text-gray-100 mb-8 max-w-lg">
-            Unlock your full potential with our comprehensive O/L study materials, interactive lessons, and personalized learning paths.
-          </p>
-          <div class="flex flex-wrap gap-4">
-            <a href="#subjects" class="bg-white text-primary-700 hover:bg-gray-100 px-6 py-3 rounded-lg font-semibold shadow-lg hover:shadow-xl transition flex items-center">
-              <span>Start Learning</span>
-              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" class="w-5 h-5 ml-2">
-                <path fill-rule="evenodd" d="M7.21 14.77a.75.75 0 01.02-1.06L11.168 10 7.23 6.29a.75.75 0 111.04-1.08l4.5 4.25a.75.75 0 010 1.08l-4.5 4.25a.75.75 0 01-1.06-.02z" clip-rule="evenodd" />
-              </svg>
-            </a>
-            <a href="#premium" class="bg-primary-800 text-white hover:bg-primary-900 px-6 py-3 rounded-lg font-semibold shadow-lg hover:shadow-xl transition flex items-center">
-              <span>Premium Access</span>
-              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" class="w-5 h-5 ml-2">
-                <path fill-rule="evenodd" d="M10.868 2.884c-.321-.772-1.415-.772-1.736 0l-1.83 4.401-4.753.381c-.833.067-1.171 1.107-.536 1.651l3.62 3.102-1.106 4.637c-.194.813.691 1.456 1.405 1.02L10 15.591l4.069 2.485c.713.436 1.598-.207 1.404-1.02l-1.106-4.637 3.62-3.102c.635-.544.297-1.584-.536-1.65l-4.752-.382-1.831-4.401z" clip-rule="evenodd" />
-              </svg>
-            </a>
-          </div>
-          
-          <div class="mt-10 grid grid-cols-3 gap-4 text-center">
-            <div class="bg-white/10 backdrop-blur-sm rounded-lg p-4">
-              <div class="text-3xl font-bold text-secondary-300">15+</div>
-              <div class="text-sm text-gray-100">Subjects</div>
-            </div>
-            <div class="bg-white/10 backdrop-blur-sm rounded-lg p-4">
-              <div class="text-3xl font-bold text-secondary-300">5000+</div>
-              <div class="text-sm text-gray-100">Students</div>
-            </div>
-            <div class="bg-white/10 backdrop-blur-sm rounded-lg p-4">
-              <div class="text-3xl font-bold text-secondary-300">98%</div>
-              <div class="text-sm text-gray-100">Pass Rate</div>
-            </div>
-          </div>
-        </div>
-        
-        <div class="hidden md:block">
-          <div id="threeJsContainer" class="aspect-square max-w-md mx-auto"></div>
-        </div>
-      </div>
-    </div>
-  </section>
-  
-  <!-- Search & Filter Bar -->
-  <div class="bg-white border-b border-gray-200 sticky top-16 z-40">
-    <div class="max-w-7xl mx-auto px-4 lg:px-8 py-3">
-      <div class="flex flex-col md:flex-row md:items-center md:justify-between gap-4">
-        <div class="relative flex-grow max-w-md">
-          <input type="text" placeholder="Search for notes, subjects, papers..." class="w-full pl-10 pr-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-primary-500 outline-none">
-          <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-5 h-5 text-gray-400 absolute left-3 top-2.5">
-            <path stroke-linecap="round" stroke-linejoin="round" d="M21 21l-5.197-5.197m0 0A7.5 7.5 0 105.196 5.196a7.5 7.5 0 0010.607 10.607z" />
-          </svg>
-        </div>
-        
-        <div class="flex flex-wrap gap-2">
-          <select class="border border-gray-300 rounded-lg px-3 py-2 text-sm focus:ring-2 focus:ring-primary-500 focus:border-primary-500 outline-none">
-            <option>All Grades</option>
-            <option>Grade 10</option>
-            <option>Grade 11</option>
-          </select>
-          <select class="border border-gray-300 rounded-lg px-3 py-2 text-sm focus:ring-2 focus:ring-primary-500 focus:border-primary-500 outline-none">
-            <option>All Materials</option>
-            <option>Short Notes</option>
-            <option>Past Papers</option>
-            <option>Video Lessons</option>
-          </select>
-          <button class="bg-primary-100 text-primary-700 hover:bg-primary-200 px-3 py-2 rounded-lg text-sm font-medium flex items-center">
-            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" class="w-4 h-4 mr-1">
-              <path fill-rule="evenodd" d="M2.628 1.601C5.028 1.206 7.49 1 10 1s4.973.206 7.372.601a.75.75 0 01.628.74v2.288a2.25 2.25 0 01-.659 1.59l-4.682 4.683a2.25 2.25 0 00-.659 1.59v3.037c0 .684-.31 1.33-.844 1.757l-1.937 1.55A.75.75 0 018 18.25v-5.757a2.25 2.25 0 00-.659-1.591L2.659 6.22A2.25 2.25 0 012 4.629V2.34a.75.75 0 01.628-.74z" clip-rule="evenodd" />
-            </svg>
-            Filter
-          </button>
-        </div>
-      </div>
+  <!-- hero section -->
+<div class="swiper myHeroSwiper w-full aspect-[16/9]"> <div class="swiper-wrapper">
+    <div class="swiper-slide">
+      <img
+        src="2.png"
+        class="w-full h-full object-cover" alt="Slide 1"
+      />
     </div>
   </div>
+</div>
 
-  <!-- Subjects Section -->
-  <section id="subjects" class="max-w-7xl mx-auto px-4 lg:px-8 py-16">
-    <h3 class="text-3xl font-bold mb-2 text-gray-800">Explore Subjects</h3>
-    <p class="text-gray-600 mb-8">Comprehensive materials to help you excel in your O/L examinations</p>
-    
-    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
-      <!-- Science -->
-      <div class="subject-card bg-white rounded-xl shadow-md overflow-hidden border border-gray-100 hover:shadow-lg transition">
-        <div class="h-2 bg-blue-500"></div>
-        <div class="p-6">
-          <div class="flex items-start justify-between">
-            <div class="flex-shrink-0 bg-blue-100 rounded-lg p-3">
-              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="w-6 h-6 text-blue-700">
-                <path fill-rule="evenodd" d="M10.5 3.798v5.02a3 3 0 01-.879 2.121l-2.377 2.377a9.845 9.845 0 015.091 1.013 8.315 8.315 0 005.713.636l.285-.071-3.954-3.955a3 3 0 01-.879-2.121v-5.02a23.614 23.614 0 00-3 0zm4.5.138a.75.75 0 00.093-1.495A24.837 24.837 0 0012 2.25a25.048 25.048 0 00-3.093.191A.75.75 0 009 3.936v4.882a1.5 1.5 0 01-.44 1.06l-6.293 6.294c-1.62 1.621-.903 4.475 1.471 4.88 2.686.46 5.447.698 8.262.698 2.816 0 5.576-.239 8.262-.697 2.373-.406 3.092-3.26 1.47-4.881L15.44 9.879A1.5 1.5 0 0115 8.818V3.936z" clip-rule="evenodd" />
-              </svg>
-            </div>
-            <span class="bg-blue-100 text-blue-700 text-xs font-medium px-2.5 py-0.5 rounded-full">Popular</span>
-          </div>
-          
-          <h4 class="text-xl font-semibold mt-4 mb-2 text-gray-800">Science</h4>
-          <p class="text-gray-600 mb-4">Past papers with marking scheme.</p>
-          
-          <div class="flex flex-wrap gap-2 mb-4">
-            <span class="bg-gray-100 text-gray-700 text-xs px-2 py-1 rounded">+_+</span>
-            <span class="bg-gray-100 text-gray-700 text-xs px-2 py-1 rounded">+_+</span>
-            <span class="bg-gray-100 text-gray-700 text-xs px-2 py-1 rounded">+_+</span>
-          </div>
-          
-          <div class="flex justify-between items-center pt-2 border-t border-gray-100">
-            <div class="text-sm text-gray-500">
-              <span class="font-medium">42</span> resources
-            </div>
-            <a href="https://pastpapers.wiki/gce-o-l-science-past-papers-with-answers-2/" class="text-blue-600 hover:text-blue-700 font-medium text-sm flex items-center">
-              Explore
-              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" class="w-4 h-4 ml-1">
-                <path fill-rule="evenodd" d="M5 10a.75.75 0 01.75-.75h6.638L10.23 7.29a.75.75 0 111.04-1.08l3.5 3.25a.75.75 0 010 1.08l-3.5 3.25a.75.75 0 11-1.04-1.08l2.158-1.96H5.75A.75.75 0 015 10z" clip-rule="evenodd" />
-              </svg>
-            </a>
-          </div>
-        </div>
-      </div>
-      
-      <!-- Mathematics -->
-      <div class="subject-card bg-white rounded-xl shadow-md overflow-hidden border border-gray-100 hover:shadow-lg transition">
-        <div class="h-2 bg-green-500"></div>
-        <div class="p-6">
-          <div class="flex items-start justify-between">
-            <div class="flex-shrink-0 bg-green-100 rounded-lg p-3">
-              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="w-6 h-6 text-green-700">
-                <path fill-rule="evenodd" d="M6.32 1.827a49.255 49.255 0 0111.36 0c1.497.174 2.57 1.46 2.57 2.93V19.5a3 3 0 01-3 3H6.75a3 3 0 01-3-3V4.757c0-1.47 1.073-2.756 2.57-2.93zM7.5 11.25a.75.75 0 01.75-.75h.008a.75.75 0 01.75.75v.008a.75.75 0 01-.75.75H8.25a.75.75 0 01-.75-.75v-.008zm.75 1.5a.75.75 0 00-.75.75v.008c0 .414.336.75.75.75h.008a.75.75 0 00.75-.75V13.5a.75.75 0 00-.75-.75H8.25zm-.75 3a.75.75 0 01.75-.75h.008a.75.75 0 01.75.75v.008a.75.75 0 01-.75.75H8.25a.75.75 0 01-.75-.75v-.008zm.75 1.5a.75.75 0 00-.75.75v.008c0 .414.336.75.75.75h.008a.75.75 0 00.75-.75V18a.75.75 0 00-.75-.75H8.25zm1.748-6a.75.75 0 01.75-.75h.007a.75.75 0 01.75.75v.008a.75.75 0 01-.75.75h-.007a.75.75 0 01-.75-.75v-.008zm.75 1.5a.75.75 0 00-.75.75v.008c0 .414.336.75.75.75h.007a.75.75 0 00.75-.75V13.5a.75.75 0 00-.75-.75h-.007zm-.75 3a.75.75 0 01.75-.75h.007a.75.75 0 01.75.75v.008a.75.75 0 01-.75.75h-.007a.75.75 0 01-.75-.75v-.008zm.75 1.5a.75.75 0 00-.75.75v.008c0 .414.336.75.75.75h.007a.75.75 0 00.75-.75V18a.75.75 0 00-.75-.75h-.007zm1.754-6a.75.75 0 01.75-.75h.008a.75.75 0 01.75.75v.008a.75.75 0 01-.75.75h-.008a.75.75 0 01-.75-.75v-.008zm.75 1.5a.75.75 0 00-.75.75v.008c0 .414.336.75.75.75h.008a.75.75 0 00.75-.75V13.5a.75.75 0 00-.75-.75h-.008zm-.75 3a.75.75 0 01.75-.75h.008a.75.75 0 01.75.75v.008a.75.75 0 01-.75.75h-.008a.75.75 0 01-.75-.75v-.008zm.75 1.5a.75.75 0 00-.75.75v.008c0 .414.336.75.75.75h.008a.75.75 0 00.75-.75V18a.75.75 0 00-.75-.75h-.008zm1.748-6a.75.75 0 01.75-.75h.008a.75.75 0 01.75.75v.008a.75.75 0 01-.75.75h-.008a.75.75 0 01-.75-.75v-.008zm.75 1.5a.75.75 0 00-.75.75v.008c0 .414.336.75.75.75h.008a.75.75 0 00.75-.75V13.5a.75.75 0 00-.75-.75h-.008zm-8.25-6A.75.75 0 018.25 6h7.5a.75.75 0 01.75.75v.75a.75.75 0 01-.75.75h-7.5a.75.75 0 01-.75-.75v-.75zm9 9a.75.75 0 00-1.5 0V18a.75.75 0 001.5 0v-2.25z" clip-rule="evenodd" />
-              </svg>
-            </div>
-            <span class="bg-green-100 text-green-700 text-xs font-medium px-2.5 py-0.5 rounded-full">Updated</span>
-          </div>
-          
-          <h4 class="text-xl font-semibold mt-4 mb-2 text-gray-800">Mathematics</h4>
-          <p class="text-gray-600 mb-4">Past papers with marking scheme.</p>
-          
-          <div class="flex flex-wrap gap-2 mb-4">
-            <span class="bg-gray-100 text-gray-700 text-xs px-2 py-1 rounded">+_+</span>
-            <span class="bg-gray-100 text-gray-700 text-xs px-2 py-1 rounded">+_+</span>
-            <span class="bg-gray-100 text-gray-700 text-xs px-2 py-1 rounded">+_+</span>
-          </div>
-          
-          <div class="flex justify-between items-center pt-2 border-t border-gray-100">
-            <div class="text-sm text-gray-500">
-              <span class="font-medium">38</span> resources
-            </div>
-            <a href="https://pastpapers.wiki/o-l-mathematics-past-papers-and-answers-in-sinhala-medium-new/" class="text-green-600 hover:text-green-700 font-medium text-sm flex items-center">
-              Explore
-              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" class="w-4 h-4 ml-1">
-                <path fill-rule="evenodd" d="M5 10a.75.75 0 01.75-.75h6.638L10.23 7.29a.75.75 0 111.04-1.08l3.5 3.25a.75.75 0 010 1.08l-3.5 3.25a.75.75 0 11-1.04-1.08l2.158-1.96H5.75A.75.75 0 015 10z" clip-rule="evenodd" />
-              </svg>
-            </a>
-          </div>
-        </div>
-      </div>
-      
-      <!-- English -->
-      <div class="subject-card bg-white rounded-xl shadow-md overflow-hidden border border-gray-100 hover:shadow-lg transition">
-        <div class="h-2 bg-purple-500"></div>
-        <div class="p-6">
-          <div class="flex items-start justify-between">
-            <div class="flex-shrink-0 bg-purple-100 rounded-lg p-3">
-              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="w-6 h-6 text-purple-700">
-                <path d="M11.7 2.805a.75.75 0 01.6 0A60.65 60.65 0 0122.83 8.72a.75.75 0 01-.231 1.337 49.949 49.949 0 00-9.902 3.912l-.003.002-.34.18a.75.75 0 01-.707 0A50.009 50.009 0 001.4 10.057a.75.75 0 01-.23-1.337A60.653 60.653 0 0111.7 2.805z" />
-                <path d="M13.06 15.473a48.45 48.45 0 017.666-3.282c.134 1.414.22 2.843.255 4.285a.75.75 0 01-.46.71 47.878 47.878 0 00-8.105 4.342.75.75 0 01-.832 0 47.877 47.877 0 00-8.104-4.342.75.75 0 01-.461-.71c.035-1.442.121-2.87.255-4.286A48.4 48.4
 
-<!-- Continuing from the English subject card -->
-                <path d="M13.06 15.473a48.45 48.45 0 017.666-3.282c.134 1.414.22 2.843.255 4.285a.75.75 0 01-.46.71 47.878 47.878 0 00-8.105 4.342.75.75 0 01-.832 0 47.877 47.877 0 00-8.104-4.342.75.75 0 01-.461-.71c.035-1.442.121-2.87.255-4.286A48.4 48.4 0 016 13.18v1.27a1.5 1.5 0 003 0v-1.27a48.4 48.4 0 014.06-1.007z" />
-              </svg>
-            </div>
-            <span class="bg-purple-100 text-purple-700 text-xs font-medium px-2.5 py-0.5 rounded-full">Essential</span>
-          </div>
-          
-          <h4 class="text-xl font-semibold mt-4 mb-2 text-gray-800">English</h4>
-          <p class="text-gray-600 mb-4">Past papers with marking scheme.</p>
-          
-          <div class="flex flex-wrap gap-2 mb-4">
-            <span class="bg-gray-100 text-gray-700 text-xs px-2 py-1 rounded">+_+</span>
-            <span class="bg-gray-100 text-gray-700 text-xs px-2 py-1 rounded">+_+</span>
-            <span class="bg-gray-100 text-gray-700 text-xs px-2 py-1 rounded">+_+</span>
-          </div>
-          
-          <div class="flex justify-between items-center pt-2 border-t border-gray-100">
-            <div class="text-sm text-gray-500">
-              <span class="font-medium">35</span> resources
-            </div>
-            <a href="https://pastpapers.wiki/gce-o-l-english-language-past-papers-with-answers/" class="text-purple-600 hover:text-purple-700 font-medium text-sm flex items-center">
-              Explore
-              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" class="w-4 h-4 ml-1">
-                <path fill-rule="evenodd" d="M5 10a.75.75 0 01.75-.75h6.638L10.23 7.29a.75.75 0 111.04-1.08l3.5 3.25a.75.75 0 010 1.08l-3.5 3.25a.75.75 0 11-1.04-1.08l2.158-1.96H5.75A.75.75 0 015 10z" clip-rule="evenodd" />
-              </svg>
-            </a>
-          </div>
-        </div>
-      </div>
-      
-      <!-- History -->
-      <div class="subject-card bg-white rounded-xl shadow-md overflow-hidden border border-gray-100 hover:shadow-lg transition">
-        <div class="h-2 bg-amber-500"></div>
-        <div class="p-6">
-          <div class="flex items-start justify-between">
-            <div class="flex-shrink-0 bg-amber-100 rounded-lg p-3">
-              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="w-6 h-6 text-amber-700">
-                <path d="M11.584 2.376a.75.75 0 01.832 0l9 6a.75.75 0 11-.832 1.248L12 3.901 3.416 9.624a.75.75 0 01-.832-1.248l9-6z" />
-                <path fill-rule="evenodd" d="M20.25 10.332v9.918H21a.75.75 0 010 1.5H3a.75.75 0 010-1.5h.75v-9.918a.75.75 0 01.634-.74A49.109 49.109 0 0112 9c2.59 0 5.134.202 7.616.592a.75.75 0 01.634.74zm-7.5 2.418a.75.75 0 00-1.5 0v6.75a.75.75 0 001.5 0v-6.75zm3-.75a.75.75 0 01.75.75v6.75a.75.75 0 01-1.5 0v-6.75a.75.75 0 01.75-.75zM9 12.75a.75.75 0 00-1.5 0v6.75a.75.75 0 001.5 0v-6.75z" clip-rule="evenodd" />
-              </svg>
-            </div>
-            <span class="bg-amber-100 text-amber-700 text-xs font-medium px-2.5 py-0.5 rounded-full">New Content</span>
-          </div>
-          
-          <h4 class="text-xl font-semibold mt-4 mb-2 text-gray-800">History</h4>
-          <p class="text-gray-600 mb-4">Past papers with marking scheme.</p>
-          
-          <div class="flex flex-wrap gap-2 mb-4">
-            <span class="bg-gray-100 text-gray-700 text-xs px-2 py-1 rounded">+_+</span>
-            <span class="bg-gray-100 text-gray-700 text-xs px-2 py-1 rounded">+_+</span>
-            <span class="bg-gray-100 text-gray-700 text-xs px-2 py-1 rounded">+_+</span>
-          </div>
-          
-          <div class="flex justify-between items-center pt-2 border-t border-gray-100">
-            <div class="text-sm text-gray-500">
-              <span class="font-medium">29</span> resources
-            </div>
-            <a href="https://pastpapers.wiki/o-l-history-past-papers-and-answers-in-sinhala-medium/" class="text-amber-600 hover:text-amber-700 font-medium text-sm flex items-center">
-              Explore
-              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" class="w-4 h-4 ml-1">
-                <path fill-rule="evenodd" d="M5 10a.75.75 0 01.75-.75h6.638L10.23 7.29a.75.75 0 111.04-1.08l3.5 3.25a.75.75 0 010 1.08l-3.5 3.25a.75.75 0 11-1.04-1.08l2.158-1.96H5.75A.75.75 0 015 10z" clip-rule="evenodd" />
-              </svg>
-            </a>
-          </div>
-        </div>
-      </div>
-      
-      <!-- Sinhala -->
-      <div class="subject-card bg-white rounded-xl shadow-md overflow-hidden border border-gray-100 hover:shadow-lg transition">
-        <div class="h-2 bg-sky-500"></div>
-        <div class="p-6">
-          <div class="flex items-start justify-between">
-            <div class="flex-shrink-0 bg-sky-100 rounded-lg p-3">
-              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="w-6 h-6 text-sky-700">
-                <path fill-rule="evenodd" d="M2.25 5.25a3 3 0 013-3h13.5a3 3 0 013 3V15a3 3 0 01-3 3h-3v.257c0 .597.237 1.17.659 1.591l.621.622a.75.75 0 01-.53 1.28h-9a.75.75 0 01-.53-1.28l.621-.622a2.25 2.25 0 00.659-1.59V18h-3a3 3 0 01-3-3V5.25zm1.5 0v7.5a1.5 1.5 0 001.5 1.5h13.5a1.5 1.5 0 001.5-1.5v-7.5a1.5 1.5 0 00-1.5-1.5H5.25a1.5 1.5 0 00-1.5 1.5z" clip-rule="evenodd" />
-              </svg>
-            </div>
-            <span class="bg-sky-100 text-sky-700 text-xs font-medium px-2.5 py-0.5 rounded-full">In Demand</span>
-          </div>
-          
-          <h4 class="text-xl font-semibold mt-4 mb-2 text-gray-800">Sinhala</h4>
-          <p class="text-gray-600 mb-4">Past papers with marking scheme.</p>
-          
-          <div class="flex flex-wrap gap-2 mb-4">
-            <span class="bg-gray-100 text-gray-700 text-xs px-2 py-1 rounded">+_+</span>
-            <span class="bg-gray-100 text-gray-700 text-xs px-2 py-1 rounded">+_+</span>
-            <span class="bg-gray-100 text-gray-700 text-xs px-2 py-1 rounded">+_+</span>
-          </div>
-          
-          <div class="flex justify-between items-center pt-2 border-t border-gray-100">
-            <div class="text-sm text-gray-500">
-              <span class="font-medium">32</span> resources
-            </div>
-            <a href="https://pastpapers.wiki/gce-o-l-sinhala-language-literature-past-papers-with-answers/" class="text-sky-600 hover:text-sky-700 font-medium text-sm flex items-center">
-              Explore
-              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" class="w-4 h-4 ml-1">
-                <path fill-rule="evenodd" d="M5 10a.75.75 0 01.75-.75h6.638L10.23 7.29a.75.75 0 111.04-1.08l3.5 3.25a.75.75 0 010 1.08l-3.5 3.25a.75.75 0 11-1.04-1.08l2.158-1.96H5.75A.75.75 0 015 10z" clip-rule="evenodd" />
-              </svg>
-            </a>
-          </div>
-        </div>
-      </div>
-      <!-- Buddhism -->
-      <div class="subject-card bg-white rounded-xl shadow-md overflow-hidden border border-gray-100 hover:shadow-lg transition">
-        <div class="h-2 bg-sky-500"></div>
-        <div class="p-6">
-          <div class="flex items-start justify-between">
-            <div class="flex-shrink-0 bg-sky-100 rounded-lg p-3">
-              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="w-6 h-6 text-sky-700">
-                <path fill-rule="evenodd" d="M2.25 5.25a3 3 0 013-3h13.5a3 3 0 013 3V15a3 3 0 01-3 3h-3v.257c0 .597.237 1.17.659 1.591l.621.622a.75.75 0 01-.53 1.28h-9a.75.75 0 01-.53-1.28l.621-.622a2.25 2.25 0 00.659-1.59V18h-3a3 3 0 01-3-3V5.25zm1.5 0v7.5a1.5 1.5 0 001.5 1.5h13.5a1.5 1.5 0 001.5-1.5v-7.5a1.5 1.5 0 00-1.5-1.5H5.25a1.5 1.5 0 00-1.5 1.5z" clip-rule="evenodd" />
-              </svg>
-            </div>
-            <span class="bg-sky-100 text-sky-700 text-xs font-medium px-2.5 py-0.5 rounded-full">In Demand</span>
-          </div>
-          
-          <h4 class="text-xl font-semibold mt-4 mb-2 text-gray-800">Buddhism</h4>
-          <p class="text-gray-600 mb-4">Past papers with marking scheme.</p>
-          
-          <div class="flex flex-wrap gap-2 mb-4">
-            <span class="bg-gray-100 text-gray-700 text-xs px-2 py-1 rounded">+_+</span>
-            <span class="bg-gray-100 text-gray-700 text-xs px-2 py-1 rounded">+_+</span>
-            <span class="bg-gray-100 text-gray-700 text-xs px-2 py-1 rounded">+_+</span>
-          </div>
-          
-          <div class="flex justify-between items-center pt-2 border-t border-gray-100">
-            <div class="text-sm text-gray-500">
-              <span class="font-medium">32</span> resources
-            </div>
-            <a href="https://pastpapers.wiki/gce-o-l-buddhism-past-papers-with-answers/" class="text-sky-600 hover:text-sky-700 font-medium text-sm flex items-center">
-              Explore
-              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" class="w-4 h-4 ml-1">
-                <path fill-rule="evenodd" d="M5 10a.75.75 0 01.75-.75h6.638L10.23 7.29a.75.75 0 111.04-1.08l3.5 3.25a.75.75 0 010 1.08l-3.5 3.25a.75.75 0 11-1.04-1.08l2.158-1.96H5.75A.75.75 0 015 10z" clip-rule="evenodd" />
-              </svg>
-            </a>
-          </div>
-        </div>
-      </div>
-      <!-- Civic Education -->
-      <div class="subject-card bg-white rounded-xl shadow-md overflow-hidden border border-gray-100 hover:shadow-lg transition">
-        <div class="h-2 bg-sky-500"></div>
-        <div class="p-6">
-          <div class="flex items-start justify-between">
-            <div class="flex-shrink-0 bg-sky-100 rounded-lg p-3">
-              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="w-6 h-6 text-sky-700">
-                <path fill-rule="evenodd" d="M2.25 5.25a3 3 0 013-3h13.5a3 3 0 013 3V15a3 3 0 01-3 3h-3v.257c0 .597.237 1.17.659 1.591l.621.622a.75.75 0 01-.53 1.28h-9a.75.75 0 01-.53-1.28l.621-.622a2.25 2.25 0 00.659-1.59V18h-3a3 3 0 01-3-3V5.25zm1.5 0v7.5a1.5 1.5 0 001.5 1.5h13.5a1.5 1.5 0 001.5-1.5v-7.5a1.5 1.5 0 00-1.5-1.5H5.25a1.5 1.5 0 00-1.5 1.5z" clip-rule="evenodd" />
-              </svg>
-            </div>
-            <span class="bg-sky-100 text-sky-700 text-xs font-medium px-2.5 py-0.5 rounded-full">In Demand</span>
-          </div>
-          
-          <h4 class="text-xl font-semibold mt-4 mb-2 text-gray-800">Civic Education</h4>
-          <p class="text-gray-600 mb-4">Past papers with marking scheme.</p>
-          
-          <div class="flex flex-wrap gap-2 mb-4">
-            <span class="bg-gray-100 text-gray-700 text-xs px-2 py-1 rounded">+_+</span>
-            <span class="bg-gray-100 text-gray-700 text-xs px-2 py-1 rounded">+_+</span>
-            <span class="bg-gray-100 text-gray-700 text-xs px-2 py-1 rounded">+_+</span>
-          </div>
-          
-          <div class="flex justify-between items-center pt-2 border-t border-gray-100">
-            <div class="text-sm text-gray-500">
-              <span class="font-medium">32</span> resources
-            </div>
-            <a href="https://pastpapers.wiki/gce-o-l-civic-education-past-papers-with-answers/" class="text-sky-600 hover:text-sky-700 font-medium text-sm flex items-center">
-              Explore
-              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" class="w-4 h-4 ml-1">
-                <path fill-rule="evenodd" d="M5 10a.75.75 0 01.75-.75h6.638L10.23 7.29a.75.75 0 111.04-1.08l3.5 3.25a.75.75 0 010 1.08l-3.5 3.25a.75.75 0 11-1.04-1.08l2.158-1.96H5.75A.75.75 0 015 10z" clip-rule="evenodd" />
-              </svg>
-            </a>
-          </div>
-        </div>
-      </div>
-       <!-- O/L Health & Physical Education  -->
-       <div class="subject-card bg-white rounded-xl shadow-md overflow-hidden border border-gray-100 hover:shadow-lg transition">
-        <div class="h-2 bg-sky-500"></div>
-        <div class="p-6">
-          <div class="flex items-start justify-between">
-            <div class="flex-shrink-0 bg-sky-100 rounded-lg p-3">
-              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="w-6 h-6 text-sky-700">
-                <path fill-rule="evenodd" d="M2.25 5.25a3 3 0 013-3h13.5a3 3 0 013 3V15a3 3 0 01-3 3h-3v.257c0 .597.237 1.17.659 1.591l.621.622a.75.75 0 01-.53 1.28h-9a.75.75 0 01-.53-1.28l.621-.622a2.25 2.25 0 00.659-1.59V18h-3a3 3 0 01-3-3V5.25zm1.5 0v7.5a1.5 1.5 0 001.5 1.5h13.5a1.5 1.5 0 001.5-1.5v-7.5a1.5 1.5 0 00-1.5-1.5H5.25a1.5 1.5 0 00-1.5 1.5z" clip-rule="evenodd" />
-              </svg>
-            </div>
-            <span class="bg-sky-100 text-sky-700 text-xs font-medium px-2.5 py-0.5 rounded-full">In Demand</span>
-          </div>
-          
-          <h4 class="text-xl font-semibold mt-4 mb-2 text-gray-800">O/L Health & Physical Education </h4>
-          <p class="text-gray-600 mb-4">Past papers with marking scheme.</p>
-          
-          <div class="flex flex-wrap gap-2 mb-4">
-            <span class="bg-gray-100 text-gray-700 text-xs px-2 py-1 rounded">+_+</span>
-            <span class="bg-gray-100 text-gray-700 text-xs px-2 py-1 rounded">+_+</span>
-            <span class="bg-gray-100 text-gray-700 text-xs px-2 py-1 rounded">+_+</span>
-          </div>
-          
-          <div class="flex justify-between items-center pt-2 border-t border-gray-100">
-            <div class="text-sm text-gray-500">
-              <span class="font-medium">32</span> resources
-            </div>
-            <a href="https://pastpapers.wiki/gce-o-l-health-physical-education-past-papers-with-answers/" class="text-sky-600 hover:text-sky-700 font-medium text-sm flex items-center">
-              Explore
-              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" class="w-4 h-4 ml-1">
-                <path fill-rule="evenodd" d="M5 10a.75.75 0 01.75-.75h6.638L10.23 7.29a.75.75 0 111.04-1.08l3.5 3.25a.75.75 0 010 1.08l-3.5 3.25a.75.75 0 11-1.04-1.08l2.158-1.96H5.75A.75.75 0 015 10z" clip-rule="evenodd" />
-              </svg>
-            </a>
-          </div>
-        </div>
-      </div>
-      <!-- Geography -->
-      <div class="subject-card bg-white rounded-xl shadow-md overflow-hidden border border-gray-100 hover:shadow-lg transition">
-        <div class="h-2 bg-emerald-500"></div>
-        <div class="p-6">
-          <div class="flex items-start justify-between">
-            <div class="flex-shrink-0 bg-emerald-100 rounded-lg p-3">
-              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="w-6 h-6 text-emerald-700">
-                <path d="M21.721 12.752a9.711 9.711 0 00-.945-5.003 12.754 12.754 0 01-4.339 2.708 18.991 18.991 0 01-.214 4.772 17.165 17.165 0 005.498-2.477zM14.634 15.55a17.324 17.324 0 00.332-4.647c-.952.227-1.945.347-2.966.347-1.021 0-2.014-.12-2.966-.347a17.515 17.515 0 00.332 4.647 17.385 17.385 0 005.268 0zM9.772 17.119a18.963 18.963 0 004.456 0A17.182 17.182 0 0112 21.724a17.18 17.18 0 01-2.228-4.605zM7.777 15.23a18.87 18.87 0 01-.214-4.774 12.753 12.753 0 01-4.34-2.708 9.711 9.711 0 00-.944 5.004 17.165 17.165 0 005.498 2.477zM21.356 14.752a9.765 9.765 0 01-7.478 6.817 18.64 18.64 0 001.988-4.718 18.627 18.627 0 005.49-2.098zM2.644 14.752c1.682.971 3.53 1.688 5.49 2.099a18.64 18.64 0 001.988 4.718 9.765 9.765 0 01-7.478-6.816zM13.878 2.43a9.755 9.755 0 016.116 3.986 11.267 11.267 0 01-3.746 2.504 18.63 18.63 0 00-2.37-6.49zM12 2.276a17.152 17.152 0 012.805 7.121c-.897.23-1.837.353-2.805.353-.968 0-1.908-.122-2.805-.353A17.151 17.151 0 0112 2.276zM10.122 2.43a18.629 18.629 0 00-2.37 6.49 11.266 11.266 0 01-3.746-2.504 9.754 9.754 0 016.116-3.985z" />
-              </svg>
-            </div>
-            <span class="bg-emerald-100 text-emerald-700 text-xs font-medium px-2.5 py-0.5 rounded-full">Updated</span>
-          </div>
-          
-          <h4 class="text-xl font-semibold mt-4 mb-2 text-gray-800">Geography</h4>
-          <p class="text-gray-600 mb-4">Past papers with marking scheme.</p>
-          
-          <div class="flex flex-wrap gap-2 mb-4">
-            <span class="bg-gray-100 text-gray-700 text-xs px-2 py-1 rounded">+_+</span>
-            <span class="bg-gray-100 text-gray-700 text-xs px-2 py-1 rounded">+_+</span>
-            <span class="bg-gray-100 text-gray-700 text-xs px-2 py-1 rounded">+_+</span>
-          </div>
-          
-          <div class="flex justify-between items-center pt-2 border-t border-gray-100">
-            <div class="text-sm text-gray-500">
-              <span class="font-medium">27</span> resources
-            </div>
-            <a href="https://pastpapers.wiki/gce-o-l-geography-past-papers-with-answers-2/" class="text-emerald-600 hover:text-emerald-700 font-medium text-sm flex items-center">
-              Explore
-              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" class="w-4 h-4 ml-1">
-                <path fill-rule="evenodd" d="M5 10a.75.75 0 01.75-.75h6.638L10.23 7.29a.75.75 0 111.04-1.08l3.5 3.25a.75.75 0 010 1.08l-3.5 3.25a.75.75 0 11-1.04-1.08l2.158-1.96H5.75A.75.75 0 015 10z" clip-rule="evenodd" />
-              </svg>
-            </a>
-          </div>
-        </div>
-      </div>
-      
-      <div class="col-span-1 sm:col-span-2 lg:col-span-3 flex justify-center">
-        <a href="https://drive.google.com/drive/folders/1FaVHgjAkCdXiqDcS_V93rcUX0Hi2VLbL?usp=drive_link" class="text-primary-600 hover:text-primary-700 font-medium flex items-center">
-          Special Short Notes 
-          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" class="w-5 h-5 ml-1">
-            <path fill-rule="evenodd" d="M5.23 7.21a.75.75 0 011.06.02L10 11.168l3.71-3.938a.75.75 0 111.08 1.04l-4.25 4.5a.75.75 0 01-1.08 0l-4.25-4.5a.75.75 0 01.02-1.06z" clip-rule="evenodd" />
-          </svg>
-        </a>
-      </div>
-    </div>
-    <div class="col-span-1 sm:col-span-2 lg:col-span-3 flex justify-center">
-      <a href="http://www.edupub.gov.lk/BooksDownload.php" class="text-primary-600 hover:text-primary-700 font-medium flex items-center">
-Grade 10 and 11 Text Books 
-        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" class="w-5 h-5 ml-1">
-          <path fill-rule="evenodd" d="M5.23 7.21a.75.75 0 011.06.02L10 11.168l3.71-3.938a.75.75 0 111.08 1.04l-4.25 4.5a.75.75 0 01-1.08 0l-4.25-4.5a.75.75 0 01.02-1.06z" clip-rule="evenodd" />
-        </svg>
-      </a>
-    </div>
+<!-- Portfolio Full View Modal -->
+<div id="portfolioModal" class="fixed inset-0 bg-black bg-opacity-70 z-50 hidden flex items-center justify-center">
+  <div class="bg-white rounded-lg max-w-xl w-full mx-4 p-6 relative">
+    <button id="closeModal" class="absolute top-3 right-3 text-gray-500 hover:text-red-500 text-2xl">&times;</button>
+    <img id="modalImage" src="" alt="Full View" class="w-full h-auto rounded mb-4" />
+    <h3 id="modalTitle" class="text-2xl font-semibold mb-2"></h3>
+    <span id="modalCategory" class="text-sm text-gray-500 mb-4 block"></span>
+    <p id="modalDescription" class="text-gray-700 text-base">Loading description...</p>
   </div>
+</div>
 
-  <!-- Features Section -->
-  <section id="features" class="py-16 bg-gray-50">
-    <div class="max-w-7xl mx-auto px-4 lg:px-8">
-      <div class="text-center mb-12">
-        <h3 class="text-3xl font-bold mb-4 text-gray-800">Why Students Love Us</h3>
-        <p class="text-gray-600 max-w-2xl mx-auto">Our platform is designed with students in mind, offering innovative tools to help you excel in your O/L examinations.</p>
+<!-- Portfolio Section -->
+<section class="portfolio section pt-20 md:pt-32 bg-white relative z-10" id="portfolio">
+  <div class="container mx-auto px-4">
+    <div class="title-wrapper text-center" data-aos="fade-up">
+      <h2 class="section-title mb-2 text-3xl font-bold">
+       My Latest Art Work Here.
+      </h2>
+      
+    </div>
+
+      
+      <div class="portfolio-filters" data-aos="fade-up" data-aos-delay="300">
+        <button class="filter-btn active" data-filter="all">All</button>
+        <button class="filter-btn" data-filter="web">Graphic Design</button>
+        <button class="filter-btn" data-filter="graphic">Websites</button>
+        
       </div>
       
-      <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
-        <!-- Feature 1 -->
-        <div class="bg-white p-6 rounded-xl shadow-md border border-gray-100">
-          <div class="bg-primary-100 w-14 h-14 flex items-center justify-center rounded-lg mb-4">
-            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="w-7 h-7 text-primary-700">
-              <path d="M11.25 4.533A9.707 9.707 0 006 3a9.735 9.735 0 00-3.25.555.75.75 0 00-.5.707v14.25a.75.75 0 001 .707A8.237 8.237 0 016 18.75c1.995 0 3.823.707 5.25 1.886V4.533zM12.75 20.636A8.214 8.214 0 0118 18.75c.966 0 1.89.166 2.75.47a.75.75 0 001-.708V4.262a.75.75 0 00-.5-.707A9.735 9.735 0 0018 3a9.707 9.707 0 00-5.25 1.533v16.103z" />
-            </svg>
-          </div>
-          <h4 class="text-xl font-semibold mb-3 text-gray-800">Comprehensive Notes</h4>
-          <p class="text-gray-600">Well-structured study materials covering all syllabus topics with simplified explanations and visual aids.</p>
-        </div>
-        
-        <!-- Feature 2 -->
-        <div class="bg-white p-6 rounded-xl shadow-md border border-gray-100">
-          <div class="bg-primary-100 w-14 h-14 flex items-center justify-center rounded-lg mb-4">
-            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="w-7 h-7 text-primary-700">
-              <path fill-rule="evenodd" d="M2.25 12c0-5.385 4.365-9.75 9.75-9.75s9.75 4.365 9.75 9.75-4.365 9.75-9.75 9.75S2.25 17.385 2.25 12zm14.024-.983a1.125 1.125 0 010 1.966l-5.603 3.113A1.125 1.125 0 019 15.113V8.887c0-.857.921-1.4 1.671-.983l5.603 3.113z" clip-rule="evenodd" />
-            </svg>
-          </div>
-          <h4 class="text-xl font-semibold mb-3 text-gray-800">Video Lessons</h4>
-          <p class="text-gray-600">Engaging video tutorials taught by experienced teachers to enhance understanding of complex concepts.</p>
-        </div>
-        
-        <!-- Feature 3 -->
-        <div class="bg-white p-6 rounded-xl shadow-md border border-gray-100">
-          <div class="bg-primary-100 w-14 h-14 flex items-center justify-center rounded-lg mb-4">
-            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="w-7 h-7 text-primary-700">
-              <path fill-rule="evenodd" d="M7.5 6a4.5 4.5 0 119 0 4.5 4.5 0 01-9 0zM3.751 20.105a8.25 8.25 0 0116.498 0 .75.75 0 01-.437.695A18.683 18.683 0 0112 22.5c-2.786 0-5.433-.608-7.812-1.7a.75.75 0 01-.437-.695z" clip-rule="evenodd" />
-            </svg>
-          </div>
-          <h4 class="text-xl font-semibold mb-3 text-gray-800">1-on-1 Tutoring</h4>
-          <p class="text-gray-600">Connect with qualified tutors for personalized guidance and get your academic queries resolved instantly.</p>
-        </div>
-        
-        <!-- Feature 4 -->
-        <div class="bg-white p-6 rounded-xl shadow-md border border-gray-100">
-          <div class="bg-primary-100 w-14 h-14 flex items-center justify-center rounded-lg mb-4">
-            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="w-7 h-7 text-primary-700">
-              <path fill-rule="evenodd" d="M14.447 3.027a.75.75 0 01.527.92l-4.5 16.5a.75.75 0 01-1.448-.394l4.5-16.5a.75.75 0 01.921-.526zM16.72 6.22a.75.75 0 011.06 0l5.25 5.25a.75.75 0 010 1.06l-5.25 5.25a.75.75 0 11-1.06-1.06L21.44 12l-4.72-4.72a.75.75 0 010-1.06zm-9.44 0a.75.75 0 010 1.06L2.56 12l4.72 4.72a.75.75 0 11-1.06 1.06L.97 12.53a.75.75 0 010-1.06l5.25-5.25a.75.75 0 011.06 0z" clip-rule="evenodd" />
-            </svg>
-          </div>
-          <h4 class="text-xl font-semibold mb-3 text-gray-800">Practice Tests</h4>
-          <p class="text-gray-600">Extensive question banks and timed mock exams to prepare you for the actual examination environment.</p>
-        </div>
-        
-        <!-- Feature 5 -->
-        <div class="bg-white p-6 rounded-xl shadow-md border border-gray-100">
-          <div class="bg-primary-100 w-14 h-14 flex items-center justify-center rounded-lg mb-4">
-            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="w-7 h-7 text-primary-700">
-              <path d="M18.375 2.25c-1.035 0-1.875.84-1.875 1.875v15.75c0 1.035.84 1.875 1.875 1.875h.75c1.035 0 1.875-.84 1.875-1.875V4.125c0-1.036-.84-1.875-1.875-1.875h-.75zM9.75 8.625c0-1.036.84-1.875 1.875-1.875h.75c1.036 0 1.875.84 1.875 1.875v11.25c0 1.035-.84 1.875-1.875 1.875h-.75a1.875 1.875 0 01-1.875-1.875V8.625zM3 13.125c0-1.036.84-1.875 1.875-1.875h.75c1.036 0 1.875.84 1.875 1.875v6.75c0 1.035-.84 1.875-1.875 1.875h-.75A1.875 1.875 0 013 19.875v-6.75z" />
-            </svg>
-          </div>
-          <h4 class="text-xl font-semibold mb-3 text-gray-800">Performance Analytics</h4>
-          <p class="text-gray-600">Track your progress with detailed analytics and identify areas that need improvement for targeted studying.</p>
-        </div>
-        
-        <!-- Feature 6 -->
-        <div class="bg-white p-6 rounded-xl shadow-md border border-gray-100">
-          <div class="bg-primary-100 w-14 h-14 flex items-center justify-center rounded-lg mb-4">
-            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="w-7 h-7 text-primary-700">
-              <path d="M4.913 2.658c2.075-.27 4.19-.408 6.337-.408 2.147 0 4.262.139 6.337.408 1.922.25 3.291 1.861 3.405 3.727a4.403 4.403 0 00-1.032-.211 50.89 50.89 0 00-8.42 0c-2.358.196-4.04 2.19-4.04 4.434v4.286a4.47 4.47 0 002.433 3.984L7.28 21.53A.75.75 0 016 21v-4.03a48.527 48.527 0 01-1.087-.128C2.905 16.58 1.5 14.833 1.5 12.862V6.638c0-1.97 1.405-3.718 3.413-3.979z" />
-              <path d="M15.75 7.5c-1.376 0-2.739.057-4.086.169C10.124 7.797 9 9.103 9 10.609v4.285c0 1.507 1.128 2.814 2.67 2.94 1.243.102 2.5.157 3.768.165l2.782 2.781a.75.75 0 001.28-.53v-2.39l.33-.026c1.542-.125 2.67-1.433 2.67-2.94v-4.286c0-1.505-1.125-2.811-2.664-2.94A49.392 49.392 0 0015.75 7.5z" />
-            </svg>
-          </div>
-          <h4 class="text-xl font-semibold mb-3 text-gray-800">Community Support</h4>
-          <p class="text-gray-600">Join discussion forums to connect with peers, share knowledge, and collaborate on challenging topics.</p>
-        </div>
-      </div>
-    </div>
-  </section>
-
-  <!-- Premium Plan Section -->
-  <section id="premium" class="py-16 bg-gradient-to-br from-primary-900 to-primary-800 text-white">
-    <div class="max-w-7xl mx-auto px-4 lg:px-8">
-      <div class="grid md:grid-cols-2 gap-12 items-center">
-        <div>
-          <span class="inline-block bg-white/10 backdrop-blur-sm text-secondary-300 text-sm font-medium px-3 py-1 rounded-full mb-4">Premium Access</span>
-          <h3 class="text-3xl font-bold mb-6">Unlock Your Full Potential</h3>
-          <p class="text-gray-100 mb-8">Take your studies to the next level with our premium subscription and access exclusive features designed to boost your exam performance.</p>
-          
-          <ul class="space-y-4 mb-8">
-            <li class="flex items-start">
-              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="w-6 h-6 text-secondary-300 mr-2 flex-shrink-0">
-                <path fill-rule="evenodd" d="M2.25 12c0-5.385 4.365-9.75 9.75-9.75s9.75 4.365 9.75 9.75-4.365 9.75-9.75 9.75S2.25 17.385 2.25 12zm13.36-1.814a.75.75 0 10-1.22-.872l-3.236 4.53L9.53 12.22a.75.75 0 00-1.06 1.06l2.25 2.25a.75.75 0 001.14-.094l3.75-5.25z" clip-rule="evenodd" />
-              </svg>
-              <span>Unlimited access to all study materials across subjects</span>
-            </li>
-          
-            <li class="flex items-start">
-              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="w-6 h-6 text-secondary-300 mr-2 flex-shrink-0">
-                <path fill-rule="evenodd" d="M2.25 12c0-5.385 4.365-9.75 9.75-9.75s9.75 4.365 9.75 9.75-4.365 9.75-9.75 9.75S2.25 17.385 2.25 12zm13.36-1.814a.75.75 0 10-1.22-.872l-3.236 4.53L9.53 12.22a.75.75 0 00-1.06 1.06l2.25 2.25a.75.75 0 001.14-.094l3.75-5.25z" clip-rule="evenodd" />
-              </svg>
-              <span>Priority access to live tutoring sessions with experts</span>
-            </li>
-            <li class="flex items-start">
-              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="w-6 h-6 text-secondary-300 mr-2 flex-shrink-0">
-                <path fill-rule="evenodd" d="M2.25 12c0-5.385 4.365-9.75 9.75-9.75s9.75 4.365 9.75 9.75-4.365 9.75-9.75 9.75S2.25 17.385 2.25 12zm13.36-1.814a.75.75 0 10-1.22-.872l-3.236 4.53L9.53 12.22a.75.75 0 00-1.06 1.06l2.25 2.25a.75.75 0 001.14-.094l3.75-5.25z" clip-rule="evenodd" />
-              </svg>
-              <span>Advanced analytics dashboard with personalized recommendations</span>
-            </li>
-            <li class="flex items-start">
-              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="w-6 h-6 text-secondary-300 mr-2 flex-shrink-0">
-                <path fill-rule="evenodd" d="M2.25 12c0-5.385 4.365-9.75 9.75-9.75s9.75 4.365 9.75 9.75-4.365 9.75-9.75 9.75S2.25 17.385 2.25 12zm13.36-1.814a.75.75 0 10-1.22-.872l-3.236 4.53L9.53 12.22a.75.75 0 00-1.06 1.06l2.25 2.25a.75.75 0 001.14-.094l3.75-5.25z" clip-rule="evenodd" />
-              </svg>
-              <span>Ad-free experience with offline download option</span>
-            </li>
-          </ul>
-          
-          <div class="space-y-4">
-            <div class="flex items-center gap-4">
-              <div class="flex items-center">
-                <span class="text-3xl font-bold">Rs.2,500</span>
-                <span class="text-lg ml-1">/month</span>
-              </div>
-              <span class="bg-secondary-500/20 text-secondary-300 text-xs font-semibold px-3 py-1 rounded-full">Save 20%</span>
-            </div>
+      <div class="portfolio-grid">
+        <div class="portfolio-item" data-category="web" data-aos="fade-up" data-aos-delay="100">
+          <img src="img/1.png" 
+               alt="E-commerce Website" 
+               class="portfolio-img">
+          <div class="portfolio-overlay">
+           
+            <div class="portfolio-links">
             
-            <div class="flex flex-wrap gap-4">
-              <a href="https://wa.link/qcqg68" class="bg-white text-primary-700 hover:bg-gray-100 px-6 py-3 rounded-lg font-semibold transition flex items-center">
-                <span>Get Premium</span>
-                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" class="w-5 h-5 ml-2">
-                  <path fill-rule="evenodd" d="M5 10a.75.75 0 01.75-.75h6.638L10.23 7.29a.75.75 0 111.04-1.08l3.5 3.25a.75.75 0 010 1.08l-3.5 3.25a.75.75 0 11-1.04-1.08l2.158-1.96H5.75A.75.75 0 015 10z" clip-rule="evenodd" />
-                </svg>
+             <a href="#" 
+                    class="portfolio-link view-full" 
+                    data-img="img/1.png" 
+                    data-title="" 
+                    data-category="" 
+                    data-description="">
+                    <i class="fas fa-plus"></i>
               </a>
-              <a href="#free-trial" class="bg-transparent border border-white text-white hover:bg-white/10 px-6 py-3 rounded-lg font-semibold transition">
-                Try Free for 7 Days
+
+            </div>
+          </div>
+        </div>
+        
+        <div class="portfolio-item" data-category="web" data-aos="fade-up" data-aos-delay="200">
+          <img src="img/2.png" 
+               alt="Tech Startup Branding" 
+               class="portfolio-img">
+          <div class="portfolio-overlay">
+          
+            <div class="portfolio-links">
+            
+              <a href="#" 
+                    class="portfolio-link view-full" 
+                    data-img="img/2.png" 
+                    data-title="" 
+                    data-category="" 
+                    data-description="">
+                    <i class="fas fa-plus"></i>
+              </a>
+
+            </div>
+          </div>
+        </div>
+        
+        <div class="portfolio-item" data-category="web" data-aos="fade-up" data-aos-delay="300">
+          <img src="img/3.png" 
+               alt="Mobile App Design" 
+               class="portfolio-img">
+          <div class="portfolio-overlay">
+          
+            <div class="portfolio-links">
+            
+                <a href="#" 
+                    class="portfolio-link view-full" 
+                    data-img="img/3.png" 
+                         data-title="" 
+                    data-category="" 
+                    data-description="">
+                    <i class="fas fa-plus"></i>
               </a>
             </div>
           </div>
         </div>
         
-        <div class="relative hidden md:block">
-          <div class="absolute inset-0 bg-white/5 backdrop-blur-sm rounded-2xl transform rotate-3"></div>
-          <div class="relative bg-white/10 backdrop-blur-md p-8 rounded-2xl shadow-xl">
-            <div class="flex justify-between items-start mb-6">
-              <div class="flex items-center gap-2">
-                <span class="bg-secondary-400 text-white text-xs font-medium px-2.5 py-0.5 rounded-full">STUDENT</span>
-                <h4 class="font-semibold">Kusal Perera</h4>
-              </div>
-              <div class="text-xs text-gray-300">Last week</div>
-            </div>
+        <div class="portfolio-item" data-category="web" data-aos="fade-up" data-aos-delay="300">
+          <img src="img/4.png" 
+               alt="Mobile App Design" 
+               class="portfolio-img">
+          <div class="portfolio-overlay">
+         
+            <div class="portfolio-links">
             
-            <p class="text-gray-100 mb-6">
-              "Since subscribing to O/L Study Hub Premium, my grades have improved dramatically. The practice papers and video tutorials have been invaluable, especially for Mathematics and Science. I feel much more confident about my upcoming exams!"
-            </p>
-            
-            <div class="flex items-center gap-1 text-secondary-300">
-              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" class="w-5 h-5">
-                <path fill-rule="evenodd" d="M10.868 2.884c-.321-.772-1.415-.772-1.736 0l-1.83 4.401-4.753.381c-.833.067-1.171 1.107-.536 1.651l3.62 3.102-1.106 4.637c-.194.813.691 1.456 1.405 1.02L10 15.591l4.069 2.485c.713.436 1.598-.207 1.404-1.02l-1.106-4.637 3.62-3.102c.635-.544.297-1.584-.536-1.65l-4.752-.382-1.831-4.401z" clip-rule="evenodd" />
-              </svg>
-              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" class="w-5 h-5">
-                <path fill-rule="evenodd" d="M10.868 2.884c-.321-.772-1.415-.772-1.736 0l-1.83 4.401-4.753.381c-.833.067-1.171 1.107-.536 1.651l3.62 3.102-1.106 4.637c-.194.813.691 1.456 1.405 1.02L10 15.591l4.069 2.485c.713.436 1.598-.207 1.404-1.02l-1.106-4.637 3.62-3.102c.635-.544.297-1.584-.536-1.65l-4.752-.382-1.831-4.401z" clip-rule="evenodd" />
-              </svg>
-              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" class="w-5 h-5">
-                <path fill-rule="evenodd" d="M10.868 2.884c-.321-.772-1.415-.772-1.736 0l-1.83 4.401-4.753.381c-.833.067-1.171 1.107-.536 1.651l3.62 3.102-1.106 4.637c-.194.813.691 1.456 1.405 1.02L10 15.591l4.069 2.485c.713.436 1.598-.207 1.404-1.02l-1.106-4.637 3.62-3.102c.635-.544.297-1.584-.536-1.65l-4.752-.382-1.831-4.401z" clip-rule="evenodd" />
-              </svg>
-              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" class="w-5 h-5">
-                <path fill-rule="evenodd" d="M10.868 2.884c-.321-.772-1.415-.772-1.736 0l-1.83 4.401-4.753.381c-.833.067-1.171 1.107-.536 1.651l3.62 3.102-1.106 4.637c-.194.813.691 1.456 1.405 1.02L10 15.591l4.069 2.485c.713.436 1.598-.207 1.404-1.02l-1.106-4.637 3.62-3.102c.635-.544.297-1.584-.536-1.65l-4.752-.382-1.831-4.401z" clip-rule="evenodd" />
-              </svg>
-              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" class="w-5 h-5">
-                <path fill-rule="evenodd" d="M10.868 2.884c-.321-.772-1.415-.772-1.736 0l-1.83 4.401-4.753.381c-.833.067-1.171 1.107-.536 1.651l3.62 3.102-1.106 4.637c-.194.813.691 1.456 1.405 1.02L10 15.591l4.069 2.485c.713.436 1.598-.207 1.404-1.02l-1.106-4.637 3.62-3.102c.635-.544.297-1.584-.536-1.65l-4.752-.382-1.831-4.401z" clip-rule="evenodd" />
-              </svg>
+                <a href="#" 
+                    class="portfolio-link view-full" 
+                    data-img="img/4.png" 
+                      data-title="" 
+                    data-category="" 
+                    data-description="">
+                    <i class="fas fa-plus"></i>
+              </a>
             </div>
-            
-            <div class="mt-8 space-y-4">
-              <div class="bg-white/10 rounded-lg p-4">
-                <div class="flex justify-between items-center mb-2">
-                  <div class="font-medium">Science Test Results</div>
-                  <div class="text-secondary-300 font-semibold">89%</div>
-                </div>
-                <div class="w-full bg-white/20 rounded-full h-2">
-                  <div class="bg-secondary-400 h-2 rounded-full" style="width: 89%"></div>
-                </div>
-              </div>
-              
-              <div class="bg-white/10 rounded-lg p-4">
-                <div class="flex justify-between items-center mb-2">
-                  <div class="font-medium">Mathematics Progress</div>
-                  <div class="text-secondary-300 font-semibold">76%</div>
-                </div>
-                <div class="w-full bg-white/20 rounded-full h-2">
-                  <div class="bg-secondary-400 h-2 rounded-full" style="width: 76%"></div>
-                </div>
-              </div>
-              
-              <div class="bg-white/10 rounded-lg p-4">
-                <div class="flex justify-between items-center mb-2">
-                  <div class="font-medium">English Mastery</div>
-                  <div class="text-secondary-300 font-semibold">92%</div>
-                </div>
-                <div class="w-full bg-white/20 rounded-full h-2">
-                  <div class="bg-secondary-400 h-2 rounded-full" style="width: 92%"></div>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
-    </div>
-  </section>
-
-  <!-- Community Section -->
-  <section id="community" class="py-16 bg-white">
-    <div class="max-w-7xl mx-auto px-4 lg:px-8">
-      <div class="text-center mb-12">
-        <h3 class="text-3xl font-bold mb-4 text-gray-800">Join Our Community</h3>
-        <p class="text-gray-600 max-w-2xl mx-auto">Connect with fellow students and educators to enhance your learning journey</p>
-      </div>
-      
-      <div class="grid md:grid-cols-3 gap-8">
-        <!-- Community Card 1 -->
-        <div class="bg-gray-50 rounded-xl overflow-hidden border border-gray-100 shadow-md">
-          <div class="h-40 bg-gradient-to-r from-blue-600 to-blue-800 flex items-center justify-center">
-            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="w-16 h-16 text-white">
-              <path d="M4.5 6.375a4.125 4.125 0 118.25 0 4.125 4.125 0 01-8.25 0zM14.25 8.625a3.375 3.375 0 116.75 0 3.375 3.375 0 01-6.75 0zM1.5 19.125a7.125 7.125 0 0114.25 0v.003l-.001.119a.75.75 0 01-.363.63 13.067 13.067 0 01-6.761 1.873c-2.472 0-4.786-.684-6.76-1.873a.75.75 0 01-.364-.63l-.001-.122zM17.25 19.128l-.001.144a2.25 2.25 0 01-.233.96 10.088 10.088 0 005.06-1.01.75.75 0 00.42-.643 4.875 4.875 0 00-6.957-4.611 8.586 8.586 0 011.71 5.157v.003z" />
-            </svg>
-          </div>
-          <div class="p-6">
-            <h4 class="text-xl font-semibold mb-2 text-gray-800">Study Groups</h4>
-            <p class="text-gray-600 mb-4">Join subject-specific study groups to collaborate with peers facing similar challenges.</p>
-            <div class="flex items-center gap-2 text-sm text-gray-500 mb-6">
-              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" class="w-5 h-5 text-blue-600">
-                <path d="M10 9a3 3 0 100-6 3 3 0 000 6zM6 8a2 2 0 11-4 0 2 2 0 014 0zM1.49 15.326a.78.78 0 01-.358-.442 3 3 0 013.01-3.01.78.78 0 11.442.36A41.16 41.16 0 0110 14.026c1.746 0 3.332.18 4.416.57a.78.78 0 01.442-.36 3 3 0 013.01 3.01.78.78 0 01-.36.442A41.23 41.23 0 0110 18.968a41.23 41.23 0 01-8.51-1.642zM18 8a2 2 0 11-4 0 2 2 0 014 0z" />
-              </svg>
-              <span>850+ students already joined</span>
-            </div>
-            <a href="https://chat.whatsapp.com/Ick1vK5lB8e1kTgxYXeILu" class="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-lg text-sm font-medium inline-block transition">
-              Join Groups
-            </a>
           </div>
         </div>
         
-        <!-- Community Card 2 -->
-        <div class="bg-gray-50 rounded-xl overflow-hidden border border-gray-100 shadow-md">
-          <div class="h-40 bg-gradient-to-r from-green-600 to-green-800 flex items-center justify-center">
-            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="w-16 h-16 text-white">
-              <path fill-rule="evenodd" d="M4.848 2.771A49.144 49.144 0 0112 2.25c2.43 0 4.817.178 7.152.52 1.978.292 3.348 2.024 3.348 3.97v6.02c0 1.946-1.37 3.678-3.348 3.97a48.901 48.901 0 01-3.476.383.39.39 0 00-.297.17l-2.755 4.133a.75.75 0 01-1.248 0l-2.755-4.133a.39.39 0 00-.297-.17 48.9 48.9 0 01-3.476-.384c-1.978-.29-3.348-2.024-3.348-3.97V6.741c0-1.946 1.37-3.68 3.348-3.97zM6.75 8.25a.75.75 0 01.75-.75h9a.75.75 0 010 1.5h-9a.75.75 0 01-.75-.75zm.75 2.25a.75.75 0 000 1.5H12a.75.75 0 000-1.5H7.5z" clip-rule="evenodd" />
-            </svg>
-          </div>
-          <div class="p-6">
-            <h4 class="text-xl font-semibold mb-2 text-gray-800">Discussion Forums</h4>
-            <p class="text-gray-600 mb-4">Ask questions, share insights, and participate in topic-specific discussions.</p>
-            <div class="flex items-center gap-2 text-sm text-gray-500 mb-6">
-              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" class="w-5 h-5 text-green-600">
-                <path fill-rule="evenodd" d="M10 2c-2.236 0-4.43.18-6.57.524C1.993 2.755 1 4.014 1 5.426v5.148c0 1.413.993 2.67 2.43 2.902 1.168.188 2.352.327 3.55.414.28.02.521.18.642.413l1.713 3.293a.75.75 0 001.33 0l1.713-3.293a.783.783 0 01.642-.413 41.102 41.102 0 003.55-.414c1.437-.231 2.43-1.49 2.43-2.902V5.426c0-1.413-.993-2.67-2.43-2.902A41.289 41.289 0 0010 2zM6.75 6a.75.75 0 000 1.5h6.5a.75.75 0 000-1.5h-6.5zm0 2.5a.75.75 0 000 1.5h3.5a.75.75 0 000-1.5h-3.5z" clip-rule="evenodd" />
-              </svg>
-              <span>3,200+ active discussions</span>
+       <div class="portfolio-item" data-category="web" data-aos="fade-up" data-aos-delay="300">
+          <img src="img/5.png" 
+               alt="Mobile App Design" 
+               class="portfolio-img">
+          <div class="portfolio-overlay">
+          
+            <div class="portfolio-links">
+            
+                <a href="#" 
+                    class="portfolio-link view-full" 
+                    data-img="img/5.png" 
+                     data-title="" 
+                    data-category="" 
+                    data-description="">
+                    <i class="fas fa-plus"></i>
+              </a>
             </div>
-            <a href="https://chat.whatsapp.com/Ick1vK5lB8e1kTgxYXeILu" class="bg-green-600 hover:bg-green-700 text-white px-4 py-2 rounded-lg text-sm font-medium inline-block transition">
-              Join Discussions
-            </a>
           </div>
         </div>
         
-        <!-- Community Card 3 -->
-        <div class="bg-gray-50 rounded-xl overflow-hidden border border-gray-100 shadow-md">
-          <div class="h-40 bg-gradient-to-r from-purple-600 to-purple-800 flex items-center justify-center">
-            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="w-16 h-16 text-white">
-              <path d="M12.75 12.75a.75.75 0 11-1.5 0 .75.75 0 011.5 0zM7.5 15.75a.75.75 0 100-1.5.75.75 0 000 1.5zM8.25 17.25a.75.75 0 11-1.5 0 .75.75 0 011.5 0zM9.75 15.75a.75.75 0 100-1.5.75.75 0 000 1.5zM10.5 17.25a.75.75 0 11-1.5 0 .75.75 0 011.5 0zM12 15.75a.75.75 0 100-1.5.75.75 0 000 1.5zM12.75 17.25a.75.75 0 11-1.5 0 .75.75 0 011.5 0zM14.25 15.75a.75.75 0 100-1.5.75.75 0 000 1.5zM15 17.25a.75.75 0 11-1.5 0 .75.75 0 011.5 0zM16.5 15.75a.75.75 0 100-1.5.75.75 0 000 1.5zM15 12.75a.75.75 0 11-1.5 0 .75.75 0 011.5 0zM16.5 13.5a.75.75 0 100-1.5.75.75 0 000 1.5z" />
-              <path fill-rule="evenodd" d="M6.75 2.25A.75.75 0 017.5 3v1.5h9V3A.75.75 0 0118 3v1.5h.75a3 3 0 013 3v11.25a3 3 0 01-3 3H5.25a3 3 0 01-3-3V7.5a3 3 0 013-3H6V3a.75.75 0 01.75-.75zm13.5 9a1.5 1.5 0 00-1.5-1.5H5.25a1.5 1.5 0 00-1.5 1.5v7.5a1.5 1.5 0 001.5 1.5h13.5a1.5 1.5 0 001.5-1.5v-7.5z" clip-rule="evenodd" />
-            </svg>
-          </div>
-          <div class="p-6">
-            <h4 class="text-xl font-semibold mb-2 text-gray-800">Live Events</h4>
-            <p class="text-gray-600 mb-4">Attend virtual workshops, study sessions, and Q&A with subject matter experts.</p>
-            <div class="flex items-center gap-2 text-sm text-gray-500 mb-6">
-              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" class="w-5 h-5 text-purple-600">
-                <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm.75-13a.75.75 0 00-1.5 0v5c0 .414.336.75.75.75h4a.75.75 0 000-1.5h-3.25V5z" clip-rule="evenodd" />
-              </svg>
-              <span>12 upcoming events this month</span>
+        <div class="portfolio-item" data-category="web" data-aos="fade-up" data-aos-delay="300">
+          <img src="img/6.png" 
+               alt="Mobile App Design" 
+               class="portfolio-img">
+          <div class="portfolio-overlay">
+         
+            <div class="portfolio-links">
+            
+                <a href="#" 
+                    class="portfolio-link view-full" 
+                    data-img="img/6.png" 
+                        data-title="" 
+                    data-category="" 
+                    data-description="">
+                    <i class="fas fa-plus"></i>
+              </a>
             </div>
-            <a href="https://chat.whatsapp.com/Ick1vK5lB8e1kTgxYXeILu" class="bg-purple-600 hover:bg-purple-700 text-white px-4 py-2 rounded-lg text-sm font-medium inline-block transition">
-              View Calendar
-            </a>
           </div>
         </div>
-      </div>
-    </div>
-  </section>
+          
+        <div class="portfolio-item" data-category="web" data-aos="fade-up" data-aos-delay="300">
+          <img src="img/7.png" 
+               alt="Mobile App Design" 
+               class="portfolio-img">
+          <div class="portfolio-overlay">
+           
+            <div class="portfolio-links">
+            
+                <a href="#" 
+                    class="portfolio-link view-full" 
+                     data-title="" 
+                    data-category="" 
+                    data-description="">
+                    <i class="fas fa-plus"></i>
+              </a>
+            </div>
+          </div>
+        </div>
 
-  <!-- Testimonials Section -->
-  <section class="py-16 bg-gray-50">
-    <div class="max-w-7xl mx-auto px-4 lg:px-8">
-      <div class="text-center mb-12">
-        <h3 class="text-3xl font-bold mb-4 text-gray-800">What Our Students Say</h3>
-        <p class="text-gray-600 max-w-2xl mx-auto">Here's what students who used our platform have to say about their experience</p>
-      </div>
-      
-      <div class="grid md:grid-cols-3 gap-8">
-        <!-- Testimonial 1 -->
-        <div class="bg-white p-6 rounded-xl shadow-md">
-          <div class="flex items-center gap-4 mb-4">
-            <div class="w-12 h-12 bg-primary-100 rounded-full flex items-center justify-center text-primary-700 font-bold">
-              IS
-            </div>
-            <div>
-              <h5 class="font-semibold">Isuru Sandakanmina</h5>
-              <div class="text-sm text-gray-500">Grade 11 Student</div>
-            </div>
-          </div>
-          
-          <div class="flex text-secondary-400 mb-4">
-            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" class="w-5 h-5">
-              <path fill-rule="evenodd" d="M10.868 2.884c-.321-.772-1.415-.772-1.736 0l-1.83 4.401-4.753.381c-.833.067-1.171 1.107-.536 1.651l3.62 3.102-1.106 4.637c-.194.813.691 1.456 1.405 1.02L10 15.591l4.069 2.485c.713.436 1.598-.207 1.404-1.02l-1.106-4.637 3.62-3.102c.635-.544.297-1.584-.536-1.65l-4.752-.382-1.831-4.401z" clip-rule="evenodd" />
-            </svg>
-            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" class="w-5 h-5">
-              <path fill-rule="evenodd" d="M10.868 2.884c-.321-.772-1.415-.772-1.736 0l-1.83 4.401-4.753.381c-.833.067-1.171 1.107-.536 1.651l3.62 3.102-1.106 4.637c-.194.813.691 1.456 1.405 1.02L10 15.591l4.069 2.485c.713.436 1.598-.207 1.404-1.02l-1.106-4.637 3.62-3.102c.635-.544.297-1.584-.536-1.65l-4.752-.382-1.831-4.401z" clip-rule="evenodd" />
-            </svg>
-            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" class="w-5 h-5">
-              <path fill-rule="evenodd" d="M10.868 2.884c-.321-.772-1.415-.772-1.736 0l-1.83 4.401-4.753.381c-.833.067-1.171 1.107-.536 1.651l3.62 3.102-1.106 4.637c-.194.813.691 1.456 1.405 1.02L10 15.591l4.069 2.485c.713.436 1.598-.207 1.404-1.02l-1.106-4.637 3.62-3.102c.635-.544.297-1.584-.536-1.65l-4.752-.382-1.831-4.401z" clip-rule="evenodd" />
-            </svg>
-            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" class="w-5 h-5">
-              <path fill-rule="evenodd"  <path fill-rule="evenodd" d="M10.868 2.884c-.321-.772-1.415-.772-1.736 0l-1.83 4.401-4.753.381c-.833.067-1.171 1.107-.536 1.651l3.62 3.102-1.106 4.637c-.194.813.691 1.456 1.405 1.02L10 15.591l4.069 2.485c.713.436 1.598-.207 1.404-1.02l-1.106-4.637 3.62-3.102c.635-.544.297-1.584-.536-1.65l-4.752-.382-1.831-4.401z" clip-rule="evenodd" />
-            </svg>
-            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" class="w-5 h-5">
-              <path fill-rule="evenodd" d="M10.868 2.884c-.321-.772-1.415-.772-1.736 0l-1.83 4.401-4.753.381c-.833.067-1.171 1.107-.536 1.651l3.62 3.102-1.106 4.637c-.194.813.691 1.456 1.405 1.02L10 15.591l4.069 2.485c.713.436 1.598-.207 1.404-1.02l-1.106-4.637 3.62-3.102c.635-.544.297-1.584-.536-1.65l-4.752-.382-1.831-4.401z" clip-rule="evenodd" />
-            </svg>
-          </div>
-          <p class="text-gray-600">
-            "ඇත්තටම මරු , මේකේ අපිට අවශ්‍ය වෙන හැම ශෝට් නෝට් එකක්ම වගේ තියෙනවා , මාරම වටිනවා ගොඩක් ස්තූතියි !!"
-          </p>
-        </div>
-         <!-- Testimonial 1 -->
-         <div class="bg-white p-6 rounded-xl shadow-md">
-          <div class="flex items-center gap-4 mb-4">
-            <div class="w-12 h-12 bg-primary-100 rounded-full flex items-center justify-center text-primary-700 font-bold">
-              DI
-            </div>
-            <div>
-              <h5 class="font-semibold">Dineru Induwara</h5>
-              <div class="text-sm text-gray-500">Grade 11 Student</div>
-            </div>
-          </div>
-          
-          <div class="flex text-secondary-400 mb-4">
-            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" class="w-5 h-5">
-              <path fill-rule="evenodd" d="M10.868 2.884c-.321-.772-1.415-.772-1.736 0l-1.83 4.401-4.753.381c-.833.067-1.171 1.107-.536 1.651l3.62 3.102-1.106 4.637c-.194.813.691 1.456 1.405 1.02L10 15.591l4.069 2.485c.713.436 1.598-.207 1.404-1.02l-1.106-4.637 3.62-3.102c.635-.544.297-1.584-.536-1.65l-4.752-.382-1.831-4.401z" clip-rule="evenodd" />
-            </svg>
-            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" class="w-5 h-5">
-              <path fill-rule="evenodd" d="M10.868 2.884c-.321-.772-1.415-.772-1.736 0l-1.83 4.401-4.753.381c-.833.067-1.171 1.107-.536 1.651l3.62 3.102-1.106 4.637c-.194.813.691 1.456 1.405 1.02L10 15.591l4.069 2.485c.713.436 1.598-.207 1.404-1.02l-1.106-4.637 3.62-3.102c.635-.544.297-1.584-.536-1.65l-4.752-.382-1.831-4.401z" clip-rule="evenodd" />
-            </svg>
-            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" class="w-5 h-5">
-              <path fill-rule="evenodd" d="M10.868 2.884c-.321-.772-1.415-.772-1.736 0l-1.83 4.401-4.753.381c-.833.067-1.171 1.107-.536 1.651l3.62 3.102-1.106 4.637c-.194.813.691 1.456 1.405 1.02L10 15.591l4.069 2.485c.713.436 1.598-.207 1.404-1.02l-1.106-4.637 3.62-3.102c.635-.544.297-1.584-.536-1.65l-4.752-.382-1.831-4.401z" clip-rule="evenodd" />
-            </svg>
-            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" class="w-5 h-5">
-              <path fill-rule="evenodd"  <path fill-rule="evenodd" d="M10.868 2.884c-.321-.772-1.415-.772-1.736 0l-1.83 4.401-4.753.381c-.833.067-1.171 1.107-.536 1.651l3.62 3.102-1.106 4.637c-.194.813.691 1.456 1.405 1.02L10 15.591l4.069 2.485c.713.436 1.598-.207 1.404-1.02l-1.106-4.637 3.62-3.102c.635-.544.297-1.584-.536-1.65l-4.752-.382-1.831-4.401z" clip-rule="evenodd" />
-            </svg>
-            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" class="w-5 h-5">
-              <path fill-rule="evenodd" d="M10.868 2.884c-.321-.772-1.415-.772-1.736 0l-1.83 4.401-4.753.381c-.833.067-1.171 1.107-.536 1.651l3.62 3.102-1.106 4.637c-.194.813.691 1.456 1.405 1.02L10 15.591l4.069 2.485c.713.436 1.598-.207 1.404-1.02l-1.106-4.637 3.62-3.102c.635-.544.297-1.584-.536-1.65l-4.752-.382-1.831-4.401z" clip-rule="evenodd" />
-            </svg>
-          </div>
-          <p class="text-gray-600">
-            "සුපිරි කියන්න වචන නෑ ,  පාස්ට් පේපර් වගේම ඒවගේ මාර්කින් ස්කීම් එක හිටන් ඔක්කොම තියෙනවා , ගොඩක් ස්තූතියි !!"
-          </p>
-        </div>
-         <!-- Testimonial 1 -->
-         <div class="bg-white p-6 rounded-xl shadow-md">
-          <div class="flex items-center gap-4 mb-4">
-            <div class="w-12 h-12 bg-primary-100 rounded-full flex items-center justify-center text-primary-700 font-bold">
-              CD
-            </div>
-            <div>
-              <h5 class="font-semibold">Chamith dananjana</h5>
-              <div class="text-sm text-gray-500">Grade 11 Student</div>
-            </div>
-          </div>
-          
-          <div class="flex text-secondary-400 mb-4">
-            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" class="w-5 h-5">
-              <path fill-rule="evenodd" d="M10.868 2.884c-.321-.772-1.415-.772-1.736 0l-1.83 4.401-4.753.381c-.833.067-1.171 1.107-.536 1.651l3.62 3.102-1.106 4.637c-.194.813.691 1.456 1.405 1.02L10 15.591l4.069 2.485c.713.436 1.598-.207 1.404-1.02l-1.106-4.637 3.62-3.102c.635-.544.297-1.584-.536-1.65l-4.752-.382-1.831-4.401z" clip-rule="evenodd" />
-            </svg>
-            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" class="w-5 h-5">
-              <path fill-rule="evenodd" d="M10.868 2.884c-.321-.772-1.415-.772-1.736 0l-1.83 4.401-4.753.381c-.833.067-1.171 1.107-.536 1.651l3.62 3.102-1.106 4.637c-.194.813.691 1.456 1.405 1.02L10 15.591l4.069 2.485c.713.436 1.598-.207 1.404-1.02l-1.106-4.637 3.62-3.102c.635-.544.297-1.584-.536-1.65l-4.752-.382-1.831-4.401z" clip-rule="evenodd" />
-            </svg>
-            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" class="w-5 h-5">
-              <path fill-rule="evenodd" d="M10.868 2.884c-.321-.772-1.415-.772-1.736 0l-1.83 4.401-4.753.381c-.833.067-1.171 1.107-.536 1.651l3.62 3.102-1.106 4.637c-.194.813.691 1.456 1.405 1.02L10 15.591l4.069 2.485c.713.436 1.598-.207 1.404-1.02l-1.106-4.637 3.62-3.102c.635-.544.297-1.584-.536-1.65l-4.752-.382-1.831-4.401z" clip-rule="evenodd" />
-            </svg>
-            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" class="w-5 h-5">
-              <path fill-rule="evenodd"  <path fill-rule="evenodd" d="M10.868 2.884c-.321-.772-1.415-.772-1.736 0l-1.83 4.401-4.753.381c-.833.067-1.171 1.107-.536 1.651l3.62 3.102-1.106 4.637c-.194.813.691 1.456 1.405 1.02L10 15.591l4.069 2.485c.713.436 1.598-.207 1.404-1.02l-1.106-4.637 3.62-3.102c.635-.544.297-1.584-.536-1.65l-4.752-.382-1.831-4.401z" clip-rule="evenodd" />
-            </svg>
-            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" class="w-5 h-5">
-              <path fill-rule="evenodd" d="M10.868 2.884c-.321-.772-1.415-.772-1.736 0l-1.83 4.401-4.753.381c-.833.067-1.171 1.107-.536 1.651l3.62 3.102-1.106 4.637c-.194.813.691 1.456 1.405 1.02L10 15.591l4.069 2.485c.713.436 1.598-.207 1.404-1.02l-1.106-4.637 3.62-3.102c.635-.544.297-1.584-.536-1.65l-4.752-.382-1.831-4.401z" clip-rule="evenodd" />
-            </svg>
-          </div>
-          <p class="text-gray-600">
-            "මන් ඔයාලාගේ සල්ලි ගෙවලා ජොයින් වෙන්න තියෙන එකට ජොයින් උනා ඒක මාරම වටිනවා හොද සපෝට් එකක් තියෙනවා ඔයාලගෙන් ස්තූතියි ගොඩක්"
-          </p>
-        </div>
-      </div>
-    </div>
     
+        <div class="portfolio-item" data-category="web" data-aos="fade-up" data-aos-delay="300">
+          <img src="img/8.png" 
+               alt="Mobile App Design" 
+               class="portfolio-img">
+          <div class="portfolio-overlay">
+            
+            <div class="portfolio-links">
+            
+                <a href="#" 
+                    class="portfolio-link view-full" 
+                    data-img="img/8.png" 
+                    data-title="" 
+                    data-category="" 
+                    data-description="">
+                    <i class="fas fa-plus"></i>
+              </a>
+            </div>
+          </div>
+        </div>
+
+ <div class="portfolio-item" data-category="web" data-aos="fade-up" data-aos-delay="300">
+          <img src="img/9.png" 
+               alt="Mobile App Design" 
+               class="portfolio-img">
+          <div class="portfolio-overlay">
+           
+            <div class="portfolio-links">
+            
+                <a href="#" 
+                    class="portfolio-link view-full" 
+                    data-img="img/9.png" 
+                  data-title="" 
+                    data-category="" 
+                    data-description="">
+                    <i class="fas fa-plus"></i>
+              </a>
+            </div>
+          </div>
+        </div>
+
+<div class="portfolio-item" data-category="web" data-aos="fade-up" data-aos-delay="300">
+          <img src="img/10.png" 
+               alt="Mobile App Design" 
+               class="portfolio-img">
+          <div class="portfolio-overlay">
+           
+            <div class="portfolio-links">
+            
+                <a href="#" 
+                    class="portfolio-link view-full" 
+                    data-img="img/10.png" 
+                    data-title="" 
+                    data-category="" 
+                    data-description="">
+                    <i class="fas fa-plus"></i>
+              </a>
+            </div>
+          </div>
+        </div>
+
+        <div class="portfolio-item" data-category="web" data-aos="fade-up" data-aos-delay="300">
+          <img src="img/11.png" 
+               alt="Mobile App Design" 
+               class="portfolio-img">
+          <div class="portfolio-overlay">
+            
+            <div class="portfolio-links">
+            
+                <a href="#" 
+                    class="portfolio-link view-full" 
+                    data-img="img/11.png" 
+                    data-title="" 
+                    data-category="" 
+                    data-description="">
+                    <i class="fas fa-plus"></i>
+              </a>
+            </div>
+          </div>
+        </div>
+
+<div class="portfolio-item" data-category="web" data-aos="fade-up" data-aos-delay="300">
+          <img src="img/12.png" 
+               alt="Mobile App Design" 
+               class="portfolio-img">
+          <div class="portfolio-overlay">
+            
+            <div class="portfolio-links">
+            
+                <a href="#" 
+                    class="portfolio-link view-full" 
+                    data-img="img/12.png" 
+                    data-title="" 
+                    data-category="" 
+                    data-description="">
+                    <i class="fas fa-plus"></i>
+              </a>
+            </div>
+          </div>
+        </div>
+
+<div class="portfolio-item" data-category="web" data-aos="fade-up" data-aos-delay="300">
+          <img src="img/13.png" 
+               alt="Mobile App Design" 
+               class="portfolio-img">
+          <div class="portfolio-overlay">
+            
+            <div class="portfolio-links">
+            
+                <a href="#" 
+                    class="portfolio-link view-full" 
+                    data-img="img/13.png" 
+                   data-title="" 
+                    data-category="" 
+                    data-description="">
+                    <i class="fas fa-plus"></i>
+              </a>
+            </div>
+          </div>
+        </div>
+
+<div class="portfolio-item" data-category="web" data-aos="fade-up" data-aos-delay="300">
+          <img src="img/14.png" 
+               alt="Mobile App Design" 
+               class="portfolio-img">
+          <div class="portfolio-overlay">
+        
+            <div class="portfolio-links">
+            
+                <a href="#" 
+                    class="portfolio-link view-full" 
+                    data-img="img/14.png" 
+                    data-title="" 
+                    data-category="" 
+                    data-description="">
+                    <i class="fas fa-plus"></i>
+              </a>
+            </div>
+          </div>
+        </div>
+<div class="portfolio-item" data-category="web" data-aos="fade-up" data-aos-delay="300">
+          <img src="img/15.png" 
+               alt="Mobile App Design" 
+               class="portfolio-img">
+          <div class="portfolio-overlay">
+          
+            <div class="portfolio-links">
+            
+                <a href="#" 
+                    class="portfolio-link view-full" 
+                    data-img="img/15.png" 
+                    data-title="" 
+                    data-category="" 
+                    data-description="">
+                    <i class="fas fa-plus"></i>
+              </a>
+            </div>
+          </div>
+        </div>
+
+<div class="portfolio-item" data-category="web" data-aos="fade-up" data-aos-delay="300">
+          <img src="img/16.png" 
+               alt="Mobile App Design" 
+               class="portfolio-img">
+          <div class="portfolio-overlay">
+          
+            <div class="portfolio-links">
+            
+                <a href="#" 
+                    class="portfolio-link view-full" 
+                    data-img="img/16.png" 
+                     data-title="" 
+                    data-category="" 
+                    data-description="">
+                    <i class="fas fa-plus"></i>
+              </a>
+            </div>
+          </div>
+        </div>
+
+<div class="portfolio-item" data-category="web" data-aos="fade-up" data-aos-delay="300">
+          <img src="img/17.jpg" 
+               alt="Mobile App Design" 
+               class="portfolio-img">
+          <div class="portfolio-overlay">
+           
+            <div class="portfolio-links">
+            
+                <a href="#" 
+                    class="portfolio-link view-full" 
+                    data-img="img/17.jpg" 
+                     data-title="" 
+                    data-category="" 
+                    data-description="">
+                    <i class="fas fa-plus"></i>
+              </a>
+            </div>
+          </div>
+        </div>
+
+
+<div class="portfolio-item" data-category="web" data-aos="fade-up" data-aos-delay="300">
+          <img src="img/18.png" 
+               alt="Mobile App Design" 
+               class="portfolio-img">
+          <div class="portfolio-overlay">
+         
+            <div class="portfolio-links">
+            
+                <a href="#" 
+                    class="portfolio-link view-full" 
+                    data-img="img/18.png" 
+                     data-title="" 
+                    data-category="" 
+                    data-description="">
+                    <i class="fas fa-plus"></i>
+              </a>
+            </div>
+          </div>
+        </div>
+
+
+<div class="portfolio-item" data-category="web" data-aos="fade-up" data-aos-delay="300">
+          <img src="img/19.png" 
+               alt="Mobile App Design" 
+               class="portfolio-img">
+          <div class="portfolio-overlay">
+     
+            <div class="portfolio-links">
+            
+                <a href="#" 
+                    class="portfolio-link view-full" 
+                    data-img="img/19.png" 
+                     data-title="" 
+                    data-category="" 
+                    data-description="">
+                    <i class="fas fa-plus"></i>
+              </a>
+            </div>
+          </div>
+        </div>
+
+<div class="portfolio-item" data-category="web" data-aos="fade-up" data-aos-delay="300">
+          <img src="img/20.png" 
+               alt="Mobile App Design" 
+               class="portfolio-img">
+          <div class="portfolio-overlay">
+           
+            <div class="portfolio-links">
+            
+                <a href="#" 
+                    class="portfolio-link view-full" 
+                    data-img="img/20.png" 
+                    data-title="" 
+                    data-category="" 
+                    data-description="">
+                    <i class="fas fa-plus"></i>
+              </a>
+            </div>
+          </div>
+        </div>
+
+<div class="portfolio-item" data-category="web" data-aos="fade-up" data-aos-delay="300">
+          <img src="img/21.png" 
+               alt="Mobile App Design" 
+               class="portfolio-img">
+          <div class="portfolio-overlay">
+
+        
+            <div class="portfolio-links">
+            
+                <a href="#" 
+                    class="portfolio-link view-full" 
+                    data-img="img/21.png" 
+                   data-title="" 
+                    data-category="" 
+                    data-description="">
+                    <i class="fas fa-plus"></i>
+              </a>
+            </div>
+          </div>
+        </div>
+
+
+<div class="portfolio-item" data-category="web" data-aos="fade-up" data-aos-delay="300">
+          <img src="img/22.png" 
+               alt="Mobile App Design" 
+               class="portfolio-img">
+          <div class="portfolio-overlay">
+          
+            <div class="portfolio-links">
+            
+                <a href="#" 
+                    class="portfolio-link view-full" 
+                    data-img="img/22.png" 
+                   data-title="" 
+                    data-category="" 
+                    data-description="">
+                    <i class="fas fa-plus"></i>
+              </a>
+            </div>
+          </div>
+        </div>
+
+<div class="portfolio-item" data-category="web" data-aos="fade-up" data-aos-delay="300">
+          <img src="img/23.png" 
+               alt="Mobile App Design" 
+               class="portfolio-img">
+          <div class="portfolio-overlay">
+          
+            <div class="portfolio-links">
+            
+                <a href="#" 
+                    class="portfolio-link view-full" 
+                    data-img="img/23.png" 
+                   data-title="" 
+                    data-category="" 
+                    data-description="">
+                    <i class="fas fa-plus"></i>
+              </a>
+            </div>
+          </div>
+        </div>
+
+<div class="portfolio-item" data-category="web" data-aos="fade-up" data-aos-delay="300">
+          <img src="img/24.png" 
+               alt="Mobile App Design" 
+               class="portfolio-img">
+          <div class="portfolio-overlay">
+       
+            <div class="portfolio-links">
+            
+                <a href="#" 
+                    class="portfolio-link view-full" 
+                    data-img="img/24.png" 
+                    data-title="" 
+                    data-category="" 
+                    data-description="">
+                    <i class="fas fa-plus"></i>
+              </a>
+            </div>
+          </div>
+        </div>
+
+<div class="portfolio-item" data-category="web" data-aos="fade-up" data-aos-delay="300">
+          <img src="img/25.png" 
+               alt="Mobile App Design" 
+               class="portfolio-img">
+          <div class="portfolio-overlay">
+        
+            <div class="portfolio-links">
+            
+                <a href="#" 
+                    class="portfolio-link view-full" 
+                    data-img="img/25.png" 
+                   data-title="" 
+                    data-category="" 
+                    data-description="">
+                    <i class="fas fa-plus"></i>
+              </a>
+            </div>
+          </div>
+        </div>
+
+<div class="portfolio-item" data-category="web" data-aos="fade-up" data-aos-delay="300">
+          <img src="img/26.png" 
+               alt="Mobile App Design" 
+               class="portfolio-img">
+          <div class="portfolio-overlay">
+           
+            <div class="portfolio-links">
+            
+                <a href="#" 
+                    class="portfolio-link view-full" 
+                    data-img="img/26.png" 
+                  data-title="" 
+                    data-category="" 
+                    data-description="">
+                    <i class="fas fa-plus"></i>
+              </a>
+            </div>
+          </div>
+        </div>
+
+<div class="portfolio-item" data-category="web" data-aos="fade-up" data-aos-delay="300">
+          <img src="img/27.png" 
+               alt="Mobile App Design" 
+               class="portfolio-img">
+          <div class="portfolio-overlay">
+          
+            <div class="portfolio-links">
+            
+                <a href="#" 
+                    class="portfolio-link view-full" 
+                    data-img="img/27.png" 
+                    data-title="" 
+                    data-category="" 
+                    data-description="">
+                    <i class="fas fa-plus"></i>
+              </a>
+            </div>
+          </div>
+        </div>
+
+
+<div class="portfolio-item" data-category="web" data-aos="fade-up" data-aos-delay="300">
+          <img src="img/28.png" 
+               alt="Mobile App Design" 
+               class="portfolio-img">
+          <div class="portfolio-overlay">
+       
+            <div class="portfolio-links">
+            
+                <a href="#" 
+                    class="portfolio-link view-full" 
+                    data-img="img/28.png" 
+                    data-title="" 
+                    data-category="" 
+                    data-description="">
+                    <i class="fas fa-plus"></i>
+              </a>
+            </div>
+          </div>
+        </div>
+
+<div class="portfolio-item" data-category="web" data-aos="fade-up" data-aos-delay="300">
+          <img src="img/29.png" 
+               alt="Mobile App Design" 
+               class="portfolio-img">
+          <div class="portfolio-overlay">
+           
+            <div class="portfolio-links">
+            
+                <a href="#" 
+                    class="portfolio-link view-full" 
+                    data-img="img/29.png" 
+                   data-title="" 
+                    data-category="" 
+                    data-description="">
+                    <i class="fas fa-plus"></i>
+              </a>
+            </div>
+          </div>
+        </div>
+
+<div class="portfolio-item" data-category="web" data-aos="fade-up" data-aos-delay="300">
+          <img src="img/30.png" 
+               alt="Mobile App Design" 
+               class="portfolio-img">
+          <div class="portfolio-overlay">
+         
+            
+            <div class="portfolio-links">
+            
+                <a href="#" 
+                    class="portfolio-link view-full" 
+                    data-img="img/30.png" 
+                    data-title="" 
+                    data-category="" 
+                    data-description="">
+                    <i class="fas fa-plus"></i>
+              </a>
+            </div>
+          </div>
+        </div>
+
+<div class="portfolio-item" data-category="web" data-aos="fade-up" data-aos-delay="300">
+          <img src="img/31.png" 
+               alt="Mobile App Design" 
+               class="portfolio-img">
+          <div class="portfolio-overlay">
+            
+            <div class="portfolio-links">
+            
+                <a href="#" 
+                    class="portfolio-link view-full" 
+                    data-img="img/31.png" 
+                    data-title="" 
+                    data-category="" 
+                    data-description="">
+                    <i class="fas fa-plus"></i>
+              </a>
+            </div>
+          </div> 
+        </div>
+
+<div class="portfolio-item" data-category="web" data-aos="fade-up" data-aos-delay="300">
+          <img src="img/32.png" 
+               alt="Mobile App Design" 
+               class="portfolio-img">
+          <div class="portfolio-overlay">
+            
+            <div class="portfolio-links">
+            
+                <a href="#" 
+                    class="portfolio-link view-full" 
+                    data-img="img/32.png" 
+                    data-title="" 
+                    data-category="" 
+                    data-description="">
+                    <i class="fas fa-plus"></i>
+              </a>
+            </div>
+          </div> 
+        </div>
+
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+
+ <!-- Recent Work Section -->
+<div class="bg-gray-100 py-10 px-4">
+  <div class="container">
+    <div class="title-wrapper text-center" data-aos="fade-up">
+      <h2 class="section-title mb-2">
+         My Latest Web Work Here.
+      </h2>
+      <p class="text-base text-gray-600"></p>
+    </div>
+
+    <!-- Work Cards Grid -->
+    <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6">
+      
+      <!-- Work Card 1 -->
+      <div class="bg-white rounded-2xl shadow-md overflow-hidden transform hover:scale-105 hover:shadow-xl transition-all duration-300"  data-category="web" >
+        <img src="img/w1.jpg" alt="Product Image" class="w-full h-56 object-cover">
+        <div class="p-4">
+          <h3 class="text-xl font-semibold mb-2">Angel's Love Party Wear Website</h3>
+          <p class="text-gray-600 text-sm mb-4">Angel's Love is a stylish party wear brand offering elegant and trendy outfits designed to make every special moment unforgettable with a touch of glamour and grace.</p>
+          <a href="https://angelslove.lk/"><button class="bg-orange-500 text-white px-4 py-2 rounded-full hover:bg-orange-600 transition-colors">Visit Now</button></a>
+        </div>
+      </div>
+
+      <!-- Work Card 2 -->
+      <div class="bg-white rounded-2xl shadow-md overflow-hidden transform hover:scale-105 hover:shadow-xl transition-all duration-300"  data-category="web">
+        <img src="img/w4.jpg" alt="Product Image" class="w-full h-56 object-cover">
+        <div class="p-4">
+          <h3 class="text-xl font-semibold mb-2">Syara Travels Agency Website</h3>
+          <p class="text-gray-600 text-sm mb-4">Sayara Travels is a trusted travel agency offering comfortable, safe, and reliable transport services for tours, events, and airport transfers across Sri Lanka.</p>
+           <a href="https://sayaratravels.com/"><button class="bg-orange-500 text-white px-4 py-2 rounded-full hover:bg-orange-600 transition-colors">Visit Now</button></a>
+        </div>
+      </div>
+
+      <!-- Work Card 3 -->
+      <div class="bg-white rounded-2xl shadow-md overflow-hidden transform hover:scale-105 hover:shadow-xl transition-all duration-300"  data-category="web">
+        <img src="img/11.png" alt="Product Image" class="w-full h-56 object-cover">
+        <div class="p-4">
+          <h3 class="text-xl font-semibold mb-2">Nordic Lanka Cleaning Service Website</h3>
+          <p class="text-gray-600 text-sm mb-4">Nordic Lanka provides affordable, eco-friendly cleaning services in Denmark, delivering spotless results with trusted staff and guaranteed customer satisfaction.</p>
+          <a href="https://sayaratravels.com/"><button class="bg-orange-500 text-white px-4 py-2 rounded-full hover:bg-orange-600 transition-colors">Visit Now</button></a>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</div>
+
+  <!-- Contact Section -->
+  <section class="contact section section-light" id="contact">
+    <div class="container">
+      <div class="title-wrapper">
+        <h2 class="section-title" data-aos="fade-up">Get In Touch</h2>
+        <p class="subtitle" data-aos="fade-up" data-aos-delay="200">Let's discuss your project or just say hello!</p>
+      </div>
+      
+      <div class="contact-container">
+        <div class="contact-info" data-aos="fade-right" data-aos-duration="1000">
+          <p class="contact-text">Have a project in mind or want to discuss potential collaboration? Feel free to reach out through any of the channels below, and I'll get back to you as soon as possible.</p>
+          
+          <div class="contact-items">
+            <div class="contact-item">
+              <div class="contact-icon">
+                <i class="fas fa-map-marker-alt"></i>
+              </div>
+              <div class="contact-item-content">
+                <h4>Location</h4>
+                <p>Matheesha , Yapahuwa , Maho.</p>
+              </div>
+            </div>
+            
+            <div class="contact-item">
+              <div class="contact-icon">
+                <i class="fas fa-envelope"></i>
+              </div>
+              <div class="contact-item-content">
+                <h4>Email</h4>
+                <p>info@mova.lk</p>
+              </div>
+            </div>
+            
+            <div class="contact-item">
+              <div class="contact-icon">
+                <i class="fas fa-phone-alt"></i>
+              </div>
+              <div class="contact-item-content">
+                <h4>Phone</h4>
+                <p>+94 77 900 4063</p>
+              </div>
+            </div>
+          </div>
+          
+          <div class="contact-social">
+            <a href="#"><i class="fab fa-facebook-f"></i></a>
+            <a href="#"><i class="fab fa-twitter"></i></a>
+            <a href="#"><i class="fab fa-instagram"></i></a>
+            <a href="#"><i class="fab fa-linkedin-in"></i></a>
+            <a href="#"><i class="fab fa-behance"></i></a>
+            <a href="#"><i class="fab fa-dribbble"></i></a>
+          </div>
+        </div>
+        
+        <div class="contact-form-container" data-aos="fade-left" data-aos-duration="1000" data-aos-delay="200">
+          <form class="contact-form" id="contact-form">
+            <div class="form-group">
+              <label for="name">Your Name</label>
+              <input type="text" id="name" class="form-control" placeholder="Enter your name" required>
+            </div>
+            
+            <div class="form-group">
+              <label for="email">Your Email</label>
+              <input type="email" id="email" class="form-control" placeholder="Enter your email" required>
+            </div>
+            
+            <div class="form-group">
+              <label for="subject">Subject</label>
+              <input type="text" id="subject" class="form-control" placeholder="Enter subject">
+            </div>
+            
+            <div class="form-group">
+              <label for="message">Message</label>
+              <textarea id="message" class="form-control" placeholder="Enter your message" required></textarea>
+            </div>
+            
+           <button type="submit" class="btn">Send Message <i class="fas fa-paper-plane"></i></button>
+
+
+          </form>
+        </div>
+      </div>
+    </div>
   </section>
 
   <!-- Footer -->
-  <footer class="bg-gray-900 text-gray-300">
-    <div class="max-w-7xl mx-auto px-4 lg:px-8 py-12">
-      <div class="grid md:grid-cols-4 gap-8">
-        <div class="md:col-span-2">
-          <div class="flex items-center space-x-2 mb-4">
-            <div class="flex items-center justify-center w-10 h-10 rounded-full bg-primary-600 text-white">
-              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="w-6 h-6">
-                <path d="M11.7 2.805a.75.75 0 01.6 0A60.65 60.65 0 0122.83 8.72a.75.75 0 01-.231 1.337 49.949 49.949 0 00-9.902 3.912l-.003.002-.34.18a.75.75 0 01-.707 0A50.009 50.009 0 001.4 10.057a.75.75 0 01-.23-1.337A60.653 60.653 0 0111.7 2.805z" />
-                <path d="M13.06 15.473a48.45 48.45 0 017.666-3.282c.134 1.414.22 2.843.255 4.285a.75.75 0 01-.46.71 47.878 47.878 0 00-8.105 4.342.75.75 0 01-.832 0 47.877 47.877 0 00-8.104-4.342.75.75 0 01-.461-.71c.035-1.442.121-2.87.255-4.286A48.4 48.4 0 016 13.18v1.27a1.5 1.5 0 003 0v-1.27a48.4 48.4 0 014.06-1.007z" />
-              </svg>
-            </div>
-            <h2 class="text-xl font-bold text-white">O/L Study Hub</h2>
+  <footer>
+    <div class="container">
+      <div class="footer-content">
+        <div>
+          <div class="footer-logo">
+            <svg width="30" height="30" viewBox="0 0 30 30" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <path d="M15 0L27.9904 7.5V22.5L15 30L2.00962 22.5V7.5L15 0Z" fill="#FF6B35"/>
+              <path d="M15 5L22.9904 9.5V18.5L15 23L7.00962 18.5V9.5L15 5Z" fill="#333"/>
+            </svg>
+            Mova lk
           </div>
-          <p class="text-sm">Empowering students to achieve academic excellence through innovative learning solutions.</p>
+          <p class="footer-desc">Creative designer and developer crafting beautiful digital experiences for brands and businesses.</p>
+          <div class="footer-social">
+            <a href="#"><i class="fab fa-facebook-f"></i></a>
+            <a href="#"><i class="fab fa-twitter"></i></a>
+            <a href="#"><i class="fab fa-instagram"></i></a>
+            <a href="#"><i class="fab fa-linkedin-in"></i></a>
+            <a href="#"><i class="fab fa-behance"></i></a>
+          </div>
         </div>
-
+        
         <div>
-          <h4 class="text-white font-medium mb-4">Resources</h4>
-          <ul class="space-y-2 text-sm">
-            <li><a href="#notes" class="hover:text-primary-400 transition">Study Notes</a></li>
-            <li><a href="#papers" class="hover:text-primary-400 transition">Past Papers</a></li>
-            <li><a href="#videos" class="hover:text-primary-400 transition">Video Lessons</a></li>
-            <li><a href="#tutors" class="hover:text-primary-400 transition">Find Tutors</a></li>
+          <h3 class="footer-title">Quick Links</h3>
+          <ul class="footer-links">
+            
+            <li><a href="#portfolio"><i class="fas fa-chevron-right"></i> Portfolio</a></li>
+          
+            <li><a href="#contact"><i class="fas fa-chevron-right"></i> Contact</a></li>
           </ul>
         </div>
-
+        
         <div>
-          <h4 class="text-white font-medium mb-4">Connect</h4>
-          <ul class="space-y-2 text-sm">
-            <li><a href="#blog" class="hover:text-primary-400 transition">Blog</a></li>
-            <li><a href="#contact" class="hover:text-primary-400 transition">Contact Us</a></li>
-            <li><a href="#faq" class="hover:text-primary-400 transition">FAQ</a></li>
-            <li><a href="#careers" class="hover:text-primary-400 transition">Careers</a></li>
-          </ul>
+          <h3 class="footer-title">Contact Info</h3>
+          <div class="footer-contact">
+            <p><i class="fas fa-map-marker-alt"></i>Matheesha , Yapahuwa , Maho.</p>
+            <p><i class="fas fa-envelope"></i>info@mova.lk</p>
+            <p><i class="fas fa-phone-alt"></i>+94 77 900 4063</p>
+            <p><i class="fas fa-globe"></i> www.mova.lk</p>
+          </div>
         </div>
       </div>
-
-      <div class="border-t border-gray-800 mt-12 pt-8 text-center text-sm">
-        <p>&copy; 2026 O/L Study Hub. All rights reserved.</p>
+      
+      <div class="footer-bottom">
+        <div class="copyright">
+          &copy; <span id="current-year"></span> Mova.lk. All rights reserved.
+        </div>
+        
+        <div class="footer-bottom-links">
+          <a href="">Privacy Policy</a>
+          <a href="">Terms of Service</a>
+          <a href="">Cookie Policy</a>
+        </div>
       </div>
     </div>
   </footer>
 
-  <!-- Scripts -->
+  <!-- Back to Top Button -->
+  <div class="back-to-top" id="back-to-top">
+    <i class="fas fa-arrow-up"></i>
+  </div>
+
   <script>
-    // Mobile menu toggle
-    const menuButton = document.getElementById('menuButton');
-    const mobileMenu = document.getElementById('mobileMenu');
-
-    menuButton.addEventListener('click', () => {
-      mobileMenu.classList.toggle('hidden');
+    // Preloader
+    window.addEventListener('load', function() {
+      const preloader = document.getElementById('preloader');
+      preloader.classList.add('fade-out');
+      setTimeout(() => {
+        preloader.style.display = 'none';
+      }, 500);
+      
+      // Initialize AOS Animation Library
+      AOS.init({
+        duration: 800,
+        easing: 'ease-in-out',
+        once: true,
+        mirror: false
+      });
     });
-
-    // Parallax effect
-    document.addEventListener('mousemove', (e) => {
-      const parallaxElements = document.querySelectorAll('.parallax');
-      parallaxElements.forEach(element => {
-        const depth = element.getAttribute('data-depth');
-        const x = (window.innerWidth - e.pageX * depth) / 100;
-        const y = (window.innerHeight - e.pageY * depth) / 100;
-        element.style.transform = `translate(${x}px, ${y}px)`;
+    
+    // Set current year in footer
+    document.getElementById('current-year').textContent = new Date().getFullYear();
+    
+    // Mobile Menu Toggle
+    const mobileMenuBtn = document.getElementById('mobile-menu-btn');
+    const mobileMenu = document.getElementById('mobile-menu');
+    const mobileMenuClose = document.getElementById('mobile-menu-close');
+    
+    mobileMenuBtn.addEventListener('click', () => {
+      mobileMenu.classList.add('active');
+    });
+    
+    mobileMenuClose.addEventListener('click', () => {
+      mobileMenu.classList.remove('active');
+    });
+    
+    // Header scroll effect
+    const header = document.getElementById('header');
+    
+    window.addEventListener('scroll', () => {
+      if (window.scrollY > 50) {
+        header.classList.add('scrolled');
+      } else {
+        header.classList.remove('scrolled');
+      }
+    });
+    
+    // Back to top button
+    const backToTopBtn = document.getElementById('back-to-top');
+    
+    window.addEventListener('scroll', () => {
+      if (window.scrollY > 300) {
+        backToTopBtn.classList.add('active');
+      } else {
+        backToTopBtn.classList.remove('active');
+      }
+    });
+    
+    backToTopBtn.addEventListener('click', () => {
+      window.scrollTo({
+        top: 0,
+        behavior: 'smooth'
+      });
+    });
+    
+    // Skills Tabs
+    const skillTabs = document.querySelectorAll('.skill-tab');
+    const skillLists = document.querySelectorAll('.skills-list');
+    
+    skillTabs.forEach(tab => {
+      tab.addEventListener('click', () => {
+        // Remove active class from all tabs and lists
+        skillTabs.forEach(t => t.classList.remove('active'));
+        skillLists.forEach(list => list.classList.remove('active'));
+        
+        // Add active class to clicked tab
+        tab.classList.add('active');
+        
+        // Show corresponding skills list
+        const tabId = tab.getAttribute('data-tab');
+        document.getElementById(`${tabId}-skills`).classList.add('active');
+        
+        // Animate skill bars
+        animateSkillBars();
+      });
+    });
+    
+    // Portfolio Filters
+    const filterBtns = document.querySelectorAll('.filter-btn');
+    const portfolioItems = document.querySelectorAll('.portfolio-item');
+    
+    filterBtns.forEach(btn => {
+      btn.addEventListener('click', () => {
+        // Remove active class from all buttons
+        filterBtns.forEach(b => b.classList.remove('active'));
+        // Add active class to clicked button
+        btn.classList.add('active');
+        
+        const filter = btn.getAttribute('data-filter');
+        
+        portfolioItems.forEach(item => {
+          if (filter === 'all' || item.getAttribute('data-category') === filter) {
+            item.style.display = 'block';
+          } else {
+            item.style.display = 'none';
+          }
+        });
+      });
+    });
+    
+    // Contact Form Submission
+    const contactForm = document.getElementById('contact-form');
+    
+  
+    
+    // Skill bars animation
+    function animateSkillBars() {
+      const activeSkillsList = document.querySelector('.skills-list.active');
+      if (!activeSkillsList) return;
+      
+      const skillBars = activeSkillsList.querySelectorAll('.skill-progress');
+      
+      skillBars.forEach(bar => {
+        const width = bar.getAttribute('data-width');
+        bar.style.width = '0';
+        
+        setTimeout(() => {
+          bar.style.width = width + '%';
+        }, 100);
+      });
+    }
+    
+    // Check if element is in viewport
+    function isInViewport(element) {
+      const rect = element.getBoundingClientRect();
+      return (
+        rect.top <= (window.innerHeight || document.documentElement.clientHeight) * 0.8 &&
+        rect.bottom >= 0
+      );
+    }
+    
+    // Handle scroll animation
+    function handleScrollAnimation() {
+      const skillsSection = document.querySelector('.skills-section');
+      if (skillsSection && isInViewport(skillsSection)) {
+        animateSkillBars();
+      }
+    }
+    
+    // Initial check and add scroll listener
+    window.addEventListener('scroll', handleScrollAnimation);
+    
+    // Initialize first tab skills
+    animateSkillBars();
+    
+    // Smooth scrolling for all anchor links
+    document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+      anchor.addEventListener('click', function (e) {
+        e.preventDefault();
+        
+        const targetId = this.getAttribute('href');
+        if (targetId === '#') return;
+        
+        const targetElement = document.querySelector(targetId);
+        if (targetElement) {
+          window.scrollTo({
+            top: targetElement.offsetTop - 80, // Adjust for header height
+            behavior: 'smooth'
+          });
+          
+          // Close mobile menu if open
+          if (mobileMenu.classList.contains('active')) {
+            mobileMenu.classList.remove('active');
+          }
+        }
       });
     });
 
-    // P5.js background animation
-    const container = document.getElementById('p5Container');
-    const sketch = (p) => {
-      p.setup = () => {
-        p.createCanvas(container.offsetWidth, container.offsetHeight);
-        p.noStroke();
-      };
+        const modal = document.getElementById('portfolioModal');
+          const modalImage = document.getElementById('modalImage');
+          const modalTitle = document.getElementById('modalTitle');
+          const modalCategory = document.getElementById('modalCategory');
+          const modalDescription = document.getElementById('modalDescription');
+          const closeModal = document.getElementById('closeModal');
 
-      p.draw = () => {
-        p.clear();
-        p.fill(22, 197, 94, 25);
-        for(let i = 0; i < 50; i++) {
-          p.ellipse(
-            p.noise(i, p.frameCount * 0.01) * p.width,
-            p.noise(i + 100, p.frameCount * 0.01) * p.height,
-            p.noise(i + 200, p.frameCount * 0.01) * 30
-          );
-        }
-      };
-    };
-    new p5(sketch, 'p5Container');
+          // Open modal
+          document.querySelectorAll('.view-full').forEach(button => {
+            button.addEventListener('click', function (e) {
+              e.preventDefault();
+              modalImage.src = this.dataset.img;
+              modalTitle.textContent = this.dataset.title;
+              modalCategory.textContent = this.dataset.category;
+              modalDescription.textContent = this.dataset.description;
+              modal.classList.remove('hidden');
+            });
+          });
+
+          // Close modal
+          closeModal.addEventListener('click', () => {
+            modal.classList.add('hidden');
+          });
+
+          // Close on click outside modal content
+          modal.addEventListener('click', (e) => {
+            if (e.target === modal) {
+              modal.classList.add('hidden');
+            }
+          });
+
+
+
+
+  document.getElementById("contact-form").addEventListener("submit", function (e) {
+    e.preventDefault();
+
+    // Collect form data
+    const name = document.getElementById("name").value.trim();
+    const email = document.getElementById("email").value.trim();
+    const subject = document.getElementById("subject").value.trim();
+    const message = document.getElementById("message").value.trim();
+
+    // Validate
+    if (!name || !email || !subject || !message) {
+      alert("Please fill in all fields!");
+      return;
+    }
+
+    // Create pretty WhatsApp message
+    const formattedMessage = `📩 *Hi Mova ? Can u help me*\n\n👤 *Name:* ${name}\n📧 *Email:* ${email}\n📝 *Subject:* ${subject}\n💬 *Message:*\n${message}`;
+
+    const phoneNumber = "94779004063"; // replace with your number
+    const whatsappURL = `https://wa.me/${phoneNumber}?text=${encodeURIComponent(formattedMessage)}`;
+
+    // Redirect to WhatsApp
+    window.location.href = whatsappURL;
+  });
+
+
+
+
+
+  </script>
+</body>
+</html>
